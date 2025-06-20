@@ -1,14 +1,30 @@
 import os
 
 # === CONFIGURATION ===
-lines_folder = "lines"
+lines_folder="lines"
 images_folder = "images"
 filenames_path = "filenames.txt"
-image_exts = ('.jpg', '.jpeg', '.png', '.gif')
 
 # === Load RNAi Line IDs ===
 with open(filenames_path, "r", encoding="utf-8") as f:
     line_ids = [line.strip() for line in f if line.strip()]
+
+# === Ensure all image folders exist and have a .gitkeep if empty ===
+for line in line_ids:
+    folder_path = os.path.join(images_folder, line)
+    os.makedirs(folder_path, exist_ok=True)  # create folder if not exist
+
+    # Check if empty (excluding hidden files like .gitkeep)
+    is_empty = not any(
+        fname for fname in os.listdir(folder_path)
+        if not fname.startswith(".")
+    )
+
+    if is_empty:
+        gitkeep_path = os.path.join(folder_path, ".gitkeep")
+        with open(gitkeep_path, "w") as f:
+            f.write("")  # create empty .gitkeep
+        print(f"📝 Added .gitkeep to empty folder: {folder_path}")
 
 
 # === HTML Template for Each Line ===
