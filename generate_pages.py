@@ -2,9 +2,8 @@ import os
 
 # === CONFIGURATION ===
 lines_folder = "lines"
-images_folder = "Images"  # Case-sensitive fix
+images_folder = "Images"
 filenames_path = "filenames.txt"
-
 valid_ext = ['.jpg', '.jpeg', '.png', '.gif', '.webp']
 
 # === Load RNAi Line IDs ===
@@ -85,22 +84,17 @@ page_template = """<!DOCTYPE html>
 
 <script>
   document.addEventListener("DOMContentLoaded", function () {{
-    const realImages = document.querySelectorAll(".real-img");
+    const images = document.querySelectorAll(".real-img");
 
-    realImages.forEach(img => {{
-      const tempImg = new Image();
-      tempImg.src = img.getAttribute("data-src");
+    images.forEach(img => {{
+      const loader = img.previousElementSibling;
+      const temp = new Image();
+      temp.src = img.dataset.src;
 
-      tempImg.onload = () => {{
-        const wrapper = img.parentElement;
-        const loader = wrapper.querySelector(".fly-loader");
-
-        img.src = tempImg.src;
+      temp.onload = () => {{
+        img.src = temp.src;
         img.style.opacity = "1";
-
-        if (loader) {{
-          loader.remove();
-        }}
+        if (loader) loader.style.display = "none";
       }};
     }});
   }});
@@ -110,8 +104,6 @@ page_template = """<!DOCTYPE html>
 </html>
 """
 
-
-
 # === Generate Each Line Page ===
 os.makedirs(lines_folder, exist_ok=True)
 
@@ -120,20 +112,15 @@ for line in line_ids:
     images = [img for img in os.listdir(image_folder) if os.path.splitext(img)[1].lower() in valid_ext] if os.path.exists(image_folder) else []
 
     image_tags = "\n".join([
-      f'''
-      <div class="img-wrapper">
-        <img class="fly-loader" src="../assets/fly-loader.gif" alt="Loading..." />
-        <a href="../Images/{line}/{img}" class="glightbox" data-gallery="line-{line}" data-title="{img}">
-          <img class="real-img" data-src="../Images/{line}/{img}" alt="{img}" loading="lazy" />
-        </a>
-      </div>
-      ''' 
-      for img in images
+        f'''
+        <div class="img-wrapper">
+          <img class="fly-loader" src="../assets/fly-loader.gif" alt="Loading..." />
+          <a href="../Images/{line}/{img}" class="glightbox" data-gallery="line-{line}" data-title="{img}">
+            <img class="real-img" data-src="../Images/{line}/{img}" alt="{img}" loading="lazy" style="opacity:0;" />
+          </a>
+        </div>'''
+        for img in images
     ])
-
-
-
-
 
     sidebar_links = ""
     for other_id in line_ids:
@@ -145,8 +132,7 @@ for line in line_ids:
 
         sidebar_links += (
             f'<a href="{other_id}.html" class="sidebar-link {active_class}" {active_id}>'
-            f'<span class="line-name">{other_id}</span>'
-            f'{count_span}</a>\n'
+            f'<span class="line-name">{other_id}</span>{count_span}</a>\n'
         )
 
     html_content = page_template.format(
