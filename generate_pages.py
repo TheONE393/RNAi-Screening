@@ -119,13 +119,14 @@ for line in line_ids:
     image_tags = "\n".join([
       f'''
       <div class="img-wrapper">
-        <img class="fly-loader" src="../assets/fly-loader.gif" alt="Loading..." />
-        <a href="../Images/{line}/{img}" class="glightbox" data-gallery="line-{line}" data-title="{img}">
-          <img class="real-img" data-src="../Images/{line}/{img}" alt="{img}" style="opacity:0;" />
+        <a href="../Images/{line}/{img}" class="glightbox" data-gallery="gallery-{line}">
+          <img src="../Images/{line}/{img}" alt="{img}">
         </a>
-      </div>'''
-    for img in images
+      </div>
+      ''' 
+      for img in images
     ])
+
 
     sidebar_links = ""
     for other_id in line_ids:
