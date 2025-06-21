@@ -102,7 +102,7 @@ for line in line_ids:
 
     image_tags = ""
     for img in images:
-        image_tags += f'<a href="../images/{line}/{img}" data-lightbox="line-{line}" data-title="{img}"><img src="../images/{line}/{img}" alt="{img}"></a>\n'
+        image_tags += f'<a href="/rnai-gallery/images/{line}/{img}" data-lightbox="line-{line}" data-title="{img}"><img src="/rnai-gallery/images/{line}/{img}" alt="{img}"></a>\n'
 
     # === Generate sidebar links with image count (only if > 0) ===
     sidebar_links = ""
@@ -151,7 +151,7 @@ for line in line_ids:
                   if os.path.splitext(img)[1].lower() in valid_ext]
         print(f"🖼️ Found {len(images)} images: {images}")
         for img in images:
-            image_path = f"../images/{line}/{img}"
+            image_path = f"/rnai-gallery/images/{line}/{img}"  # replace rnai-gallery with your actual repo name
             image_tags += f'''
             <div class="image-block">
                 <a href="{image_path}" data-lightbox="line-{line}" data-title="{img}">
