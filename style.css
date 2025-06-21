@@ -274,3 +274,19 @@ body {
   opacity: 1 !important;
   display: block !important;
 }
+.img-wrapper {
+  display: inline-block;
+  width: 200px;
+  height: auto;
+  margin: 10px;
+  border: 2px dashed blue;
+  background: #f0f0f0;
+}
+
+.img-wrapper img {
+  max-width: 100%;
+  height: auto;
+  opacity: 1 !important;
+  display: block !important;
+  border: 2px solid red;
+}
