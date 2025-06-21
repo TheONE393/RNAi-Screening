@@ -124,12 +124,13 @@ for line in line_ids:
       <div class="img-wrapper">
         <img class="fly-loader" src="../assets/fly-loader.gif" alt="Loading..." />
         <a href="../{images_folder}/{line}/{img}" class="glightbox" data-gallery="line-{line}" data-title="{img}">
-          <img class="real-img" data-src="../{images_folder}/{line}/{img}" alt="{img}" />
+          <img class="real-img" data-src="../{images_folder}/{line}/{img}" alt="{img}" style="opacity:0;" />
         </a>
       </div>
-      '''
+      ''' 
       for img in images
     ])
+
 
 
 
