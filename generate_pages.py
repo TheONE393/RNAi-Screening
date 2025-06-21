@@ -160,27 +160,15 @@ for line in line_ids:
     print(f"✅ Created: {output_path}")
 
 
+# === Generate index.html ===
 index_template = """<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>RNAi Screening Index</title>
   <link rel="stylesheet" href="style.css">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
-
-<div class="index-sidebar">
-  <h2>📁 Menu</h2>
-  <ul class="sidebar-links">
-    <li><a href="index.html" class="active-link">🏠 Index</a></li>
-    <li><a href="about.html">📖 About the Lines</a></li>
-    <li><a href="usage.html">🧪 How to Use</a></li>
-    <li><a href="suggest.html">💡 Suggest a Line</a></li>
-  </ul>
-</div>
-
-<div class="index-main">
   <h1 class="page-title">RNAi Line Navigator</h1>
   <div class="search-box">
     <input type="text" id="indexSearch" placeholder="Search for a line...">
@@ -190,7 +178,6 @@ index_template = """<!DOCTYPE html>
       {line_rows}
     </div>
   </div>
-</div>
 
 <script>
   const searchInput = document.getElementById('indexSearch');
@@ -213,8 +200,8 @@ index_template = """<!DOCTYPE html>
 </script>
 
 </body>
-</html>"""
-
+</html>
+"""
 
 # === Build index rows ===
 line_rows = ""
