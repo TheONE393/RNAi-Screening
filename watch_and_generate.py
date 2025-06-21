@@ -5,7 +5,7 @@ import subprocess
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
-WATCHED_DIR = "images"
+WATCHED_DIR = "Images"  # ✅ FIX: Match the real folder name (capital I)
 
 class ImageHandler(FileSystemEventHandler):
     def on_created(self, event):
@@ -26,6 +26,11 @@ def run_scripts():
     subprocess.run(["python", "generate_pages.py"])
 
 if __name__ == "__main__":
+    # ✅ Run once immediately when starting
+    print("🕹️ Initial run of scripts...")
+    run_scripts()
+
+    # ✅ Then start watching for changes
     event_handler = ImageHandler()
     observer = Observer()
     observer.schedule(event_handler, WATCHED_DIR, recursive=True)
