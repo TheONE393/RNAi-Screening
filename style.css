@@ -269,3 +269,8 @@ body {
   transform: translate(-50%, -50%);
   object-fit: contain;
 }
+.fly-loader, .real-img {
+  border: 2px solid red !important;
+  opacity: 1 !important;
+  display: block !important;
+}
