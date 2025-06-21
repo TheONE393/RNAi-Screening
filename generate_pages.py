@@ -32,6 +32,7 @@ page_template = """<!DOCTYPE html>
 </head>
 <body>
 
+<button class="dark-toggle" onclick="toggleDarkMode()">🌙 Toggle Dark Mode</button>
 <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
 
 <div class="sidebar" id="sidebar">
@@ -83,31 +84,23 @@ page_template = """<!DOCTYPE html>
 </script>
 
 <script>
-  document.addEventListener("DOMContentLoaded", function () {{
-  const realImages = document.querySelectorAll(".real-img");
+  function toggleDarkMode() {{
+    document.body.classList.toggle('dark-mode');
+    localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
+  }}
 
-  realImages.forEach(img => {{
-    const tempImg = new Image();
-    const src = img.getAttribute("data-src");
-    tempImg.src = src;
-
-    tempImg.onload = () => {{
-      const wrapper = img.parentElement;
-      const loader = wrapper.querySelector(".fly-loader");
-
-      img.src = src;
-      img.classList.add("loaded"); // This triggers opacity transition
-
-      if (loader) loader.remove();
-    }};
+  window.addEventListener('DOMContentLoaded', () => {{
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {{
+      document.body.classList.add('dark-mode');
+    }}
   }});
-}});
-
 </script>
 
 </body>
 </html>
 """
+
 
 # === Generate Each Line Page ===
 os.makedirs(lines_folder, exist_ok=True)
@@ -159,8 +152,6 @@ for line in line_ids:
 
     print(f"✅ Created: {output_path}")
 
-
-# === Generate index.html ===
 index_template = """<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -169,6 +160,7 @@ index_template = """<!DOCTYPE html>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <button class="dark-toggle" onclick="toggleDarkMode()">🌙 Toggle Dark Mode</button>
   <h1 class="page-title">RNAi Line Navigator</h1>
   <div class="search-box">
     <input type="text" id="indexSearch" placeholder="Search for a line...">
@@ -199,9 +191,24 @@ index_template = """<!DOCTYPE html>
   }});
 </script>
 
+<script>
+  function toggleDarkMode() {{
+    document.body.classList.toggle('dark-mode');
+    localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
+  }}
+
+  window.addEventListener('DOMContentLoaded', () => {{
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {{
+      document.body.classList.add('dark-mode');
+    }}
+  }});
+</script>
+
 </body>
 </html>
 """
+
 
 # === Build index rows ===
 line_rows = ""
