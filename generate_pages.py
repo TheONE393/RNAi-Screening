@@ -1,7 +1,7 @@
 import os
 
 # === CONFIGURATION ===
-lines_folder="lines"
+lines_folder = "lines"
 images_folder = "images"
 filenames_path = "filenames.txt"
 
@@ -12,23 +12,15 @@ with open(filenames_path, "r", encoding="utf-8") as f:
 # === Ensure all image folders exist and have a .gitkeep if empty ===
 for line in line_ids:
     folder_path = os.path.join(images_folder, line)
-    os.makedirs(folder_path, exist_ok=True)  # create folder if not exist
-
-    # Check if empty (excluding hidden files like .gitkeep)
-    is_empty = not any(
-        fname for fname in os.listdir(folder_path)
-        if not fname.startswith(".")
-    )
-
+    os.makedirs(folder_path, exist_ok=True)
+    is_empty = not any(fname for fname in os.listdir(folder_path) if not fname.startswith("."))
     if is_empty:
         gitkeep_path = os.path.join(folder_path, ".gitkeep")
         with open(gitkeep_path, "w") as f:
-            f.write("")  # create empty .gitkeep
+            f.write("")
         print(f"📝 Added .gitkeep to empty folder: {folder_path}")
 
-
 # === HTML Template for Each Line ===
-
 page_template = """<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -60,7 +52,6 @@ page_template = """<!DOCTYPE html>
   </div>
 </div>
 
-<!-- ✅ Sticky Go to Index button -->
 <a href="../index.html" class="go-index">🏠 Index</a>
 
 <script src="https://cdn.jsdelivr.net/npm/lightbox2@2/dist/js/lightbox-plus-jquery.min.js"></script>
@@ -91,124 +82,41 @@ page_template = """<!DOCTYPE html>
 </html>
 """
 
-
-# === Generate Sidebar HTML ===
-
 valid_ext = ['.jpg', '.jpeg', '.png', '.gif', '.webp']
+os.makedirs(lines_folder, exist_ok=True)
 
+# === Generate HTML for Each Line ===
 for line in line_ids:
-    image_folder = os.path.join("images", line)
-    images = [img for img in os.listdir(image_folder) if os.path.splitext(img)[1].lower() in valid_ext] if os.path.exists(image_folder) else []
+    image_folder = os.path.join(images_folder, line)
+    images = sorted([img for img in os.listdir(image_folder) if os.path.splitext(img)[1].lower() in valid_ext]) if os.path.exists(image_folder) else []
 
     image_tags = ""
     for img in images:
-        image_tags += f'<a href="/RNAi-Screening/images/{line}/{img}" data-lightbox="line-{line}" data-title="{img}"><img src="/RNAi-Screening/images/{line}/{img}" alt="{img}"></a>\n'
+        image_path = f"../images/{line}/{img}"
+        image_tags += f'''
+        <div class="image-block">
+            <a href="{image_path}" data-lightbox="line-{line}" data-title="{img}">
+                <img src="{image_path}" alt="{img}">
+            </a>
+            <div class="image-caption">{img}</div>
+        </div>
+        '''
 
-    # === Generate sidebar links with image count (only if > 0) ===
     sidebar_links = ""
     for other_id in line_ids:
-        other_folder = os.path.join("images", other_id)
-        other_images = [img for img in os.listdir(other_folder)
-                        if os.path.splitext(img)[1].lower() in valid_ext] if os.path.exists(other_folder) else []
+        other_folder = os.path.join(images_folder, other_id)
+        other_images = [img for img in os.listdir(other_folder) if os.path.splitext(img)[1].lower() in valid_ext] if os.path.exists(other_folder) else []
         img_count = len(other_images)
-
-        # Only show count if > 0
         count_span = f'<span class="img-count">{img_count}</span>' if img_count > 0 else ""
-
         active_class = "active-link" if other_id == line else ""
         active_id = 'id="activeLink"' if other_id == line else ""
 
         sidebar_links += (
             f'<a href="{other_id}.html" class="sidebar-link {active_class}" {active_id}>'
-            f'<span class="line-name">{other_id}</span>'
-            f'{count_span}'
-            f'</a>\n'
+            f'<span class="line-name">{other_id}</span>{count_span}</a>\n'
         )
 
-    # === Generate HTML ===
-    html_content = page_template.format(
-        line=line,
-        image_tags=image_tags,
-        sidebar_links=sidebar_links
-    )
-
-    with open(os.path.join("lines", f"{line}.html"), "w", encoding="utf-8") as f:
-        f.write(html_content)
-
-# === Generate Each Line's HTML Page ===
-os.makedirs(lines_folder, exist_ok=True)
-
-for line in line_ids:
-    print(f"\n🔍 Processing line: {line}")
-    image_folder = os.path.join("images", line)
-    print(f"📂 Looking in folder: {image_folder}")
-
-    valid_ext = ['.jpg', '.jpeg', '.png', '.gif', '.webp']
-    image_tags = ""
-
-    if os.path.exists(image_folder):
-        images = [img for img in os.listdir(image_folder)
-                  if os.path.splitext(img)[1].lower() in valid_ext]
-        print(f"🖼️ Found {len(images)} images: {images}")
-        for img in images:
-            image_path = f"/RNAi-Screening/images/{line}/{img}"  # replace RNAi-Screening with your actual repo name
-            image_tags += f'''
-            <div class="image-block">
-                <a href="{image_path}" data-lightbox="line-{line}" data-title="{img}">
-                    <img src="{image_path}" alt="{img}">
-                </a>
-                <div class="image-caption">{img}</div>
-            </div>
-            '''
-    else:
-        print(f"❌ Folder not found: {image_folder}")
-
-    # ✅ Sidebar links with counts + active highlight
-    sidebar_links = ""
-    for other_id in line_ids:
-        other_folder = os.path.join("images", other_id)
-        other_images = [img for img in os.listdir(other_folder)
-                        if os.path.splitext(img)[1].lower() in valid_ext] if os.path.exists(other_folder) else []
-        img_count = len(other_images)
-        count_span = f'<span class="img-count">{img_count}</span>' if img_count > 0 else ""
-
-        is_active = other_id == line
-        active_class = "active-link" if is_active else ""
-        active_id = 'id="activeLink"' if is_active else ""
-
-        sidebar_links += (
-            f'<a href="{other_id}.html" class="sidebar-link {active_class}" {active_id}>'
-            f'<span class="line-name">{other_id}</span>'
-            f'{count_span}</a>\n'
-        )
-
-    html_content = page_template.format(
-        line=line,
-        sidebar_links=sidebar_links,
-        image_tags=image_tags
-    )
-
-    with open(os.path.join(lines_folder, f"{line}.html"), "w", encoding="utf-8") as f:
-        f.write(html_content)
-
-    print(f"✅ Created: lines/{line}.html")
-
-    # ✅ Generate sidebar with current line highlighted
-    # sidebar_links = ""
-    # for other_id in line_ids:
-    #     if other_id == line:
-    #         sidebar_links += f'<a href="{other_id}.html" class="active-link" id="activeLink">{other_id}</a>\n'
-    #     else:
-    #         sidebar_links += f'<a href="{other_id}.html">{other_id}</a>\n'
-
-
-    # ✅ Use the correct variable: line (not line_id)
-    html_content = page_template.format(
-        line=line,
-        sidebar_links=sidebar_links,
-        image_tags=image_tags
-    )
-
+    html_content = page_template.format(line=line, sidebar_links=sidebar_links, image_tags=image_tags)
     with open(os.path.join(lines_folder, f"{line}.html"), "w", encoding="utf-8") as f:
         f.write(html_content)
 
@@ -259,13 +167,10 @@ index_template = """<!DOCTYPE html>
 </html>
 """
 
-
-
 line_rows = ""
 cols_per_row = 5
-
 for i in range(0, len(line_ids), cols_per_row):
-    row = line_ids[i:i+cols_per_row]
+    row = line_ids[i:i + cols_per_row]
     line_row_html = '<div class="index-row">\n'
     for line_id in row:
         line_row_html += f'<div class="index-cell"><a class="line-card" href="lines/{line_id}.html">{line_id}</a></div>\n'
