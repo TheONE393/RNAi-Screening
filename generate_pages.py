@@ -29,7 +29,7 @@ page_template = """<!DOCTYPE html>
   <title>RNAi Line {line}</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="../style.css">
-  <link href="https://cdn.jsdelivr.net/npm/lightbox2@2/dist/css/lightbox.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" rel="stylesheet">
 </head>
 <body>
 
@@ -55,7 +55,7 @@ page_template = """<!DOCTYPE html>
 
 <a href="../index.html" class="go-index">🏠 Index</a>
 
-<script src="https://cdn.jsdelivr.net/npm/lightbox2@2/dist/js/lightbox-plus-jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
 <script>
   function toggleSidebar() {{
     document.getElementById("sidebar").classList.toggle("open");
@@ -77,11 +77,16 @@ page_template = """<!DOCTYPE html>
       link.style.display = link.textContent.toLowerCase().includes(term) ? '' : 'none';
     }});
   }});
+
+  const lightbox = GLightbox({{
+    selector: '.glightbox'
+  }});
 </script>
 
 </body>
 </html>
 """
+
 
 # === Generate Each Line Page ===
 os.makedirs(lines_folder, exist_ok=True)
@@ -91,9 +96,10 @@ for line in line_ids:
     images = [img for img in os.listdir(image_folder) if os.path.splitext(img)[1].lower() in valid_ext] if os.path.exists(image_folder) else []
 
     image_tags = "\n".join([
-        f'<a href="../{images_folder}/{line}/{img}" data-lightbox="line-{line}" data-title="{img}"><img src="../{images_folder}/{line}/{img}" alt="{img}"></a>'
-        for img in images
+      f'<a href="../{images_folder}/{line}/{img}" class="glightbox" data-gallery="line-{line}" data-title="{img}"><img src="../{images_folder}/{line}/{img}" alt="{img}"></a>'
+      for img in images
     ])
+
 
     sidebar_links = ""
     for other_id in line_ids:

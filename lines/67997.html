@@ -5,7 +5,7 @@
   <title>RNAi Line 67997</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="../style.css">
-  <link href="https://cdn.jsdelivr.net/npm/lightbox2@2/dist/css/lightbox.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" rel="stylesheet">
 </head>
 <body>
 
@@ -87,7 +87,7 @@
 
 <a href="../index.html" class="go-index">🏠 Index</a>
 
-<script src="https://cdn.jsdelivr.net/npm/lightbox2@2/dist/js/lightbox-plus-jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
 <script>
   function toggleSidebar() {
     document.getElementById("sidebar").classList.toggle("open");
@@ -108,6 +108,10 @@
     links.forEach(link => {
       link.style.display = link.textContent.toLowerCase().includes(term) ? '' : 'none';
     });
+  });
+
+  const lightbox = GLightbox({
+    selector: '.glightbox'
   });
 </script>
 

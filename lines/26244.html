@@ -5,7 +5,7 @@
   <title>RNAi Line 26244</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="../style.css">
-  <link href="https://cdn.jsdelivr.net/npm/lightbox2@2/dist/css/lightbox.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" rel="stylesheet">
 </head>
 <body>
 
@@ -81,18 +81,18 @@
   <h1 class="page-title">RNAi Line 26244</h1>
   <p style="text-align:center; color:#666;">Notes and images for line 26244.</p>
   <div class="image-gallery">
-    <a href="../Images/26244/91.jpg" data-lightbox="line-26244" data-title="91.jpg"><img src="../Images/26244/91.jpg" alt="91.jpg"></a>
-<a href="../Images/26244/92.jpg" data-lightbox="line-26244" data-title="92.jpg"><img src="../Images/26244/92.jpg" alt="92.jpg"></a>
-<a href="../Images/26244/93.jpg" data-lightbox="line-26244" data-title="93.jpg"><img src="../Images/26244/93.jpg" alt="93.jpg"></a>
-<a href="../Images/26244/94.jpg" data-lightbox="line-26244" data-title="94.jpg"><img src="../Images/26244/94.jpg" alt="94.jpg"></a>
-<a href="../Images/26244/95.jpg" data-lightbox="line-26244" data-title="95.jpg"><img src="../Images/26244/95.jpg" alt="95.jpg"></a>
-<a href="../Images/26244/96.jpg" data-lightbox="line-26244" data-title="96.jpg"><img src="../Images/26244/96.jpg" alt="96.jpg"></a>
+    <a href="../Images/26244/91.jpg" class="glightbox" data-gallery="line-26244" data-title="91.jpg"><img src="../Images/26244/91.jpg" alt="91.jpg"></a>
+<a href="../Images/26244/92.jpg" class="glightbox" data-gallery="line-26244" data-title="92.jpg"><img src="../Images/26244/92.jpg" alt="92.jpg"></a>
+<a href="../Images/26244/93.jpg" class="glightbox" data-gallery="line-26244" data-title="93.jpg"><img src="../Images/26244/93.jpg" alt="93.jpg"></a>
+<a href="../Images/26244/94.jpg" class="glightbox" data-gallery="line-26244" data-title="94.jpg"><img src="../Images/26244/94.jpg" alt="94.jpg"></a>
+<a href="../Images/26244/95.jpg" class="glightbox" data-gallery="line-26244" data-title="95.jpg"><img src="../Images/26244/95.jpg" alt="95.jpg"></a>
+<a href="../Images/26244/96.jpg" class="glightbox" data-gallery="line-26244" data-title="96.jpg"><img src="../Images/26244/96.jpg" alt="96.jpg"></a>
   </div>
 </div>
 
 <a href="../index.html" class="go-index">🏠 Index</a>
 
-<script src="https://cdn.jsdelivr.net/npm/lightbox2@2/dist/js/lightbox-plus-jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
 <script>
   function toggleSidebar() {
     document.getElementById("sidebar").classList.toggle("open");
@@ -113,6 +113,10 @@
     links.forEach(link => {
       link.style.display = link.textContent.toLowerCase().includes(term) ? '' : 'none';
     });
+  });
+
+  const lightbox = GLightbox({
+    selector: '.glightbox'
   });
 </script>
 
