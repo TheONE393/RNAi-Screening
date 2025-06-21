@@ -117,20 +117,25 @@
 
 <script>
   document.addEventListener("DOMContentLoaded", function () {
-    const images = document.querySelectorAll(".real-img");
+  const realImages = document.querySelectorAll(".real-img");
 
-    images.forEach(img => {
-      const loader = img.previousElementSibling;
-      const temp = new Image();
-      temp.src = img.dataset.src;
+  realImages.forEach(img => {
+    const tempImg = new Image();
+    const src = img.getAttribute("data-src");
+    tempImg.src = src;
 
-      temp.onload = () => {
-        img.src = temp.src;
-        img.style.opacity = "1";
-        if (loader) loader.style.display = "none";
-      };
-    });
+    tempImg.onload = () => {
+      const wrapper = img.parentElement;
+      const loader = wrapper.querySelector(".fly-loader");
+
+      img.src = src;
+      img.classList.add("loaded"); // This triggers opacity transition
+
+      if (loader) loader.remove();
+    };
   });
+});
+
 </script>
 
 </body>

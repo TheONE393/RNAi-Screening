@@ -84,20 +84,25 @@ page_template = """<!DOCTYPE html>
 
 <script>
   document.addEventListener("DOMContentLoaded", function () {{
-    const images = document.querySelectorAll(".real-img");
+  const realImages = document.querySelectorAll(".real-img");
 
-    images.forEach(img => {{
-      const loader = img.previousElementSibling;
-      const temp = new Image();
-      temp.src = img.dataset.src;
+  realImages.forEach(img => {{
+    const tempImg = new Image();
+    const src = img.getAttribute("data-src");
+    tempImg.src = src;
 
-      temp.onload = () => {{
-        img.src = temp.src;
-        img.style.opacity = "1";
-        if (loader) loader.style.display = "none";
-      }};
-    }});
+    tempImg.onload = () => {{
+      const wrapper = img.parentElement;
+      const loader = wrapper.querySelector(".fly-loader");
+
+      img.src = src;
+      img.classList.add("loaded"); // This triggers opacity transition
+
+      if (loader) loader.remove();
+    }};
   }});
+}});
+
 </script>
 
 </body>
@@ -112,14 +117,14 @@ for line in line_ids:
     images = [img for img in os.listdir(image_folder) if os.path.splitext(img)[1].lower() in valid_ext] if os.path.exists(image_folder) else []
 
     image_tags = "\n".join([
-        f'''
-        <div class="img-wrapper">
-          <img class="fly-loader" src="../assets/fly-loader.gif" alt="Loading..." />
-          <a href="../Images/{line}/{img}" class="glightbox" data-gallery="line-{line}" data-title="{img}">
-            <img class="real-img" data-src="../Images/{line}/{img}" alt="{img}" loading="lazy" style="opacity:0;" />
-          </a>
-        </div>'''
-        for img in images
+      f'''
+      <div class="img-wrapper">
+        <img class="fly-loader" src="../assets/fly-loader.gif" alt="Loading..." />
+        <a href="../Images/{line}/{img}" class="glightbox" data-gallery="line-{line}" data-title="{img}">
+          <img class="real-img" data-src="../Images/{line}/{img}" alt="{img}" loading="lazy" style="opacity:0;" />
+        </a>
+      </div>'''
+    for img in images
     ])
 
     sidebar_links = ""
@@ -135,16 +140,24 @@ for line in line_ids:
             f'<span class="line-name">{other_id}</span>{count_span}</a>\n'
         )
 
-    html_content = page_template.format(
-        line=line,
-        sidebar_links=sidebar_links,
-        image_tags=image_tags
-    )
+    # Format the HTML content with the current line's data
+    try:
+        html_content = page_template.format(
+            line=line,
+            sidebar_links=sidebar_links,
+            image_tags=image_tags
+        )
+    except ValueError as e:
+        print(f"❌ Error formatting HTML for line {line}: {e}")
+        continue  # Skip this line and move to the next
 
-    with open(os.path.join(lines_folder, f"{line}.html"), "w", encoding="utf-8") as f:
+    # Write the formatted HTML content to a file
+    output_path = os.path.join(lines_folder, f"{line}.html")
+    with open(output_path, "w", encoding="utf-8") as f:
         f.write(html_content)
 
-    print(f"✅ Created: lines/{line}.html")
+    print(f"✅ Created: {output_path}")
+
 
 # === Generate index.html ===
 index_template = """<!DOCTYPE html>
