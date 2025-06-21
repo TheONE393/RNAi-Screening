@@ -81,12 +81,42 @@
   <h1 class="page-title">RNAi Line 26244</h1>
   <p style="text-align:center; color:#666;">Notes and images for line 26244.</p>
   <div class="image-gallery">
-    <a href="../Images/26244/91.jpg" class="glightbox" data-gallery="line-26244" data-title="91.jpg"><img src="../Images/26244/91.jpg" alt="91.jpg"></a>
-<a href="../Images/26244/92.jpg" class="glightbox" data-gallery="line-26244" data-title="92.jpg"><img src="../Images/26244/92.jpg" alt="92.jpg"></a>
-<a href="../Images/26244/93.jpg" class="glightbox" data-gallery="line-26244" data-title="93.jpg"><img src="../Images/26244/93.jpg" alt="93.jpg"></a>
-<a href="../Images/26244/94.jpg" class="glightbox" data-gallery="line-26244" data-title="94.jpg"><img src="../Images/26244/94.jpg" alt="94.jpg"></a>
-<a href="../Images/26244/95.jpg" class="glightbox" data-gallery="line-26244" data-title="95.jpg"><img src="../Images/26244/95.jpg" alt="95.jpg"></a>
-<a href="../Images/26244/96.jpg" class="glightbox" data-gallery="line-26244" data-title="96.jpg"><img src="../Images/26244/96.jpg" alt="96.jpg"></a>
+    
+      <div class="img-wrapper">
+        <img class="fly-loader" src="../assets/fly-loader.gif" alt="Loading..." />
+        <img class="real-img" data-src="../Images/26244/91.jpg" alt="91.jpg" />
+      </div>
+      
+
+      <div class="img-wrapper">
+        <img class="fly-loader" src="../assets/fly-loader.gif" alt="Loading..." />
+        <img class="real-img" data-src="../Images/26244/92.jpg" alt="92.jpg" />
+      </div>
+      
+
+      <div class="img-wrapper">
+        <img class="fly-loader" src="../assets/fly-loader.gif" alt="Loading..." />
+        <img class="real-img" data-src="../Images/26244/93.jpg" alt="93.jpg" />
+      </div>
+      
+
+      <div class="img-wrapper">
+        <img class="fly-loader" src="../assets/fly-loader.gif" alt="Loading..." />
+        <img class="real-img" data-src="../Images/26244/94.jpg" alt="94.jpg" />
+      </div>
+      
+
+      <div class="img-wrapper">
+        <img class="fly-loader" src="../assets/fly-loader.gif" alt="Loading..." />
+        <img class="real-img" data-src="../Images/26244/95.jpg" alt="95.jpg" />
+      </div>
+      
+
+      <div class="img-wrapper">
+        <img class="fly-loader" src="../assets/fly-loader.gif" alt="Loading..." />
+        <img class="real-img" data-src="../Images/26244/96.jpg" alt="96.jpg" />
+      </div>
+      
   </div>
 </div>
 
@@ -117,6 +147,29 @@
 
   const lightbox = GLightbox({
     selector: '.glightbox'
+  });
+</script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const realImages = document.querySelectorAll(".real-img");
+
+    realImages.forEach(img => {
+      const tempImg = new Image();
+      tempImg.src = img.getAttribute("data-src");
+
+      tempImg.onload = () => {
+        const wrapper = img.parentElement;
+        const loader = wrapper.querySelector(".fly-loader");
+
+        img.src = tempImg.src;
+        img.style.opacity = "1";
+
+        if (loader) {
+          loader.remove();
+        }
+      };
+    });
   });
 </script>
 

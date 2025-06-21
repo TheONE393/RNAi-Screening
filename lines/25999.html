@@ -115,5 +115,28 @@
   });
 </script>
 
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const realImages = document.querySelectorAll(".real-img");
+
+    realImages.forEach(img => {
+      const tempImg = new Image();
+      tempImg.src = img.getAttribute("data-src");
+
+      tempImg.onload = () => {
+        const wrapper = img.parentElement;
+        const loader = wrapper.querySelector(".fly-loader");
+
+        img.src = tempImg.src;
+        img.style.opacity = "1";
+
+        if (loader) {
+          loader.remove();
+        }
+      };
+    });
+  });
+</script>
+
 </body>
 </html>

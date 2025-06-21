@@ -83,9 +83,33 @@ page_template = """<!DOCTYPE html>
   }});
 </script>
 
+<script>
+  document.addEventListener("DOMContentLoaded", function () {{
+    const realImages = document.querySelectorAll(".real-img");
+
+    realImages.forEach(img => {{
+      const tempImg = new Image();
+      tempImg.src = img.getAttribute("data-src");
+
+      tempImg.onload = () => {{
+        const wrapper = img.parentElement;
+        const loader = wrapper.querySelector(".fly-loader");
+
+        img.src = tempImg.src;
+        img.style.opacity = "1";
+
+        if (loader) {{
+          loader.remove();
+        }}
+      }};
+    }});
+  }});
+</script>
+
 </body>
 </html>
 """
+
 
 
 # === Generate Each Line Page ===
@@ -96,9 +120,15 @@ for line in line_ids:
     images = [img for img in os.listdir(image_folder) if os.path.splitext(img)[1].lower() in valid_ext] if os.path.exists(image_folder) else []
 
     image_tags = "\n".join([
-      f'<a href="../{images_folder}/{line}/{img}" class="glightbox" data-gallery="line-{line}" data-title="{img}"><img src="../{images_folder}/{line}/{img}" alt="{img}"></a>'
+      f'''
+      <div class="img-wrapper">
+        <img class="fly-loader" src="../assets/fly-loader.gif" alt="Loading..." />
+        <img class="real-img" data-src="../{images_folder}/{line}/{img}" alt="{img}" />
+      </div>
+      '''
       for img in images
     ])
+
 
 
     sidebar_links = ""
