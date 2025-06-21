@@ -239,3 +239,41 @@ body {
     font-size: 15px;
   }
 }
+/* === Dark Mode Support === */
+body.dark-mode {
+  background-color: #1e1e1e;
+  color: #eee;
+}
+
+body.dark-mode .page-title {
+  color: #ffcc70;
+}
+
+body.dark-mode input[type="text"] {
+  background-color: #2e2e2e;
+  color: white;
+  border: 1px solid #555;
+}
+
+body.dark-mode .line-card {
+  background-color: #333;
+  color: #fff;
+  border-color: #666;
+}
+
+.dark-toggle {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: #444;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.dark-toggle:hover {
+  background-color: #666;
+}
