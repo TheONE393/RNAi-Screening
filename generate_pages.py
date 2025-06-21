@@ -121,7 +121,7 @@ for line in line_ids:
       <div class="img-wrapper">
         <img class="fly-loader" src="../assets/fly-loader.gif" alt="Loading..." />
         <a href="../Images/{line}/{img}" class="glightbox" data-gallery="line-{line}" data-title="{img}">
-          <img class="real-img" data-src="../Images/{line}/{img}" alt="{img}" loading="lazy" style="opacity:0;" />
+          <img class="real-img" data-src="../Images/{line}/{img}" alt="{img}" style="opacity:0;" />
         </a>
       </div>'''
     for img in images
