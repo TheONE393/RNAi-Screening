@@ -1,30 +1,37 @@
 import subprocess
-import threading
 import time
+import signal
+import sys
 
-def run_watch_and_generate():
-    print("👀 Starting watch_and_generate.py...")
-    subprocess.run(["python", "watch_and_generate.py"])
+# Keep references to subprocesses
+processes = []
 
-def run_upload_server():
-    print("🚀 Starting upload_server.py...")
-    subprocess.run(["python", "upload_server.py"])
+def run_script(script_name):
+    print(f"🔁 Starting {script_name}...")
+    process = subprocess.Popen(["python", script_name])
+    processes.append(process)
+
+def terminate_all():
+    print("\n🛑 Terminating all subprocesses...")
+    for proc in processes:
+        if proc.poll() is None:  # Still running
+            proc.terminate()
+            try:
+                proc.wait(timeout=5)
+            except subprocess.TimeoutExpired:
+                proc.kill()
+    print("✅ All subprocesses terminated. Exiting cleanly.")
+    sys.exit(0)
 
 if __name__ == "__main__":
     try:
-        # Upload server (Flask)
-        t1 = threading.Thread(target=run_upload_server)
+        run_script("upload_server.py")
+        time.sleep(1)  # Let Flask start
+        run_script("watch_and_generate.py")
 
-        # Watchdog + Auto Git Push
-        t2 = threading.Thread(target=run_watch_and_generate)
-
-        # Start threads (do NOT daemonize)
-        t1.start()
-        t2.start()
-
-        # Wait for threads to finish
-        t1.join()
-        t2.join()
+        # Keep main alive
+        while True:
+            time.sleep(1)
 
     except KeyboardInterrupt:
-        print("🛑 Received exit signal. Shutting down gracefully...")
+        terminate_all()
