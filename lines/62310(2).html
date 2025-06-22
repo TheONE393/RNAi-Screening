@@ -83,12 +83,13 @@
   <p style="text-align:center; color:#666;">Notes and images for line 62310(2).</p>
 
   <div class="upload-box">
-    <form action="http://127.0.0.1:5000/upload" method="post" enctype="multipart/form-data" target="_blank">
-      <input type="file" name="images" multiple required>
-      <input type="hidden" name="line_id" value="62310(2)">
+    <form action="http://127.0.0.1:5000/" method="post" enctype="multipart/form-data" target="_blank">
+      <input type="text" name="line_name" value="62310(2)" hidden>
+      <input type="file" name="file" multiple required>
       <button type="submit">📤 Upload Images to 62310(2)</button>
     </form>
   </div>
+
   <div class="image-gallery">
     
   </div>
@@ -122,9 +123,7 @@
   const lightbox = GLightbox({
     selector: '.glightbox'
   });
-</script>
 
-<script>
   function toggleDarkMode() {
     document.body.classList.toggle('dark-mode');
     localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
@@ -137,6 +136,5 @@
     }
   });
 </script>
-
 </body>
 </html>

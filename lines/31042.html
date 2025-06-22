@@ -83,48 +83,49 @@
   <p style="text-align:center; color:#666;">Notes and images for line 31042.</p>
 
   <div class="upload-box">
-    <form action="http://127.0.0.1:5000/upload" method="post" enctype="multipart/form-data" target="_blank">
-      <input type="file" name="images" multiple required>
-      <input type="hidden" name="line_id" value="31042">
+    <form action="http://127.0.0.1:5000/" method="post" enctype="multipart/form-data" target="_blank">
+      <input type="text" name="line_name" value="31042" hidden>
+      <input type="file" name="file" multiple required>
       <button type="submit">📤 Upload Images to 31042</button>
     </form>
   </div>
+
   <div class="image-gallery">
     
-      <div class="img-wrapper">
-        <a href="../Images/31042/10.jpg" class="glightbox" data-gallery="gallery-31042">
-          <img src="../Images/31042/10.jpg" alt="10.jpg">
-        </a>
-      </div>
-      
+        <div class="img-wrapper">
+          <a href="../Images/31042/10.jpg" class="glightbox" data-gallery="gallery-31042">
+            <img src="../Images/31042/10.jpg" alt="10.jpg">
+          </a>
+        </div>
+        
 
-      <div class="img-wrapper">
-        <a href="../Images/31042/6.jpg" class="glightbox" data-gallery="gallery-31042">
-          <img src="../Images/31042/6.jpg" alt="6.jpg">
-        </a>
-      </div>
-      
+        <div class="img-wrapper">
+          <a href="../Images/31042/6.jpg" class="glightbox" data-gallery="gallery-31042">
+            <img src="../Images/31042/6.jpg" alt="6.jpg">
+          </a>
+        </div>
+        
 
-      <div class="img-wrapper">
-        <a href="../Images/31042/7.jpg" class="glightbox" data-gallery="gallery-31042">
-          <img src="../Images/31042/7.jpg" alt="7.jpg">
-        </a>
-      </div>
-      
+        <div class="img-wrapper">
+          <a href="../Images/31042/7.jpg" class="glightbox" data-gallery="gallery-31042">
+            <img src="../Images/31042/7.jpg" alt="7.jpg">
+          </a>
+        </div>
+        
 
-      <div class="img-wrapper">
-        <a href="../Images/31042/8.jpg" class="glightbox" data-gallery="gallery-31042">
-          <img src="../Images/31042/8.jpg" alt="8.jpg">
-        </a>
-      </div>
-      
+        <div class="img-wrapper">
+          <a href="../Images/31042/8.jpg" class="glightbox" data-gallery="gallery-31042">
+            <img src="../Images/31042/8.jpg" alt="8.jpg">
+          </a>
+        </div>
+        
 
-      <div class="img-wrapper">
-        <a href="../Images/31042/9.jpg" class="glightbox" data-gallery="gallery-31042">
-          <img src="../Images/31042/9.jpg" alt="9.jpg">
-        </a>
-      </div>
-      
+        <div class="img-wrapper">
+          <a href="../Images/31042/9.jpg" class="glightbox" data-gallery="gallery-31042">
+            <img src="../Images/31042/9.jpg" alt="9.jpg">
+          </a>
+        </div>
+        
   </div>
 </div>
 
@@ -156,9 +157,7 @@
   const lightbox = GLightbox({
     selector: '.glightbox'
   });
-</script>
 
-<script>
   function toggleDarkMode() {
     document.body.classList.toggle('dark-mode');
     localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
@@ -171,6 +170,5 @@
     }
   });
 </script>
-
 </body>
 </html>
