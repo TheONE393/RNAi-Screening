@@ -124,16 +124,12 @@ body {
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
 }
 
-.image-caption-container {
-  display: inline-block;
-  margin: 10px;
-  text-align: center;
-}
-
 .image-caption {
-  font-size: 0.95em;
-  color: #555;
-  margin-top: 4px;
+  margin-top: 6px;
+  font-size: 14px;
+  color: #444;
+  word-wrap: break-word;
+  text-align: center;
 }
 
 /* === Index Layout === */
