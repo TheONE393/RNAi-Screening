@@ -9,11 +9,12 @@
 </head>
 <body>
 
-<button class="dark-toggle" onclick="toggleDarkMode()">🌙</button>
+<button class="dark-toggle" onclick="toggleDarkMode()">🌙 Toggle Dark Mode</button>
 <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
 
 <div class="sidebar" id="sidebar">
   <h3>All Lines</h3>
+  <button onclick="syncFromRender()" class="sync-button">🔁 Sync Uploads</button>
   <div class="search-box">
     <input type="text" id="sidebarSearch" placeholder="Search...">
   </div>
@@ -93,44 +94,74 @@
   <div class="image-gallery">
     
         <div class="img-wrapper">
-          <a href="../Images/25870/103.jpg" class="glightbox" data-gallery="gallery-25870">
+          <a href="../Images/25870/103.jpg" class="glightbox"
+             data-gallery="gallery-25870"
+             data-title=""
+             data-description=""
+             data-timestamp="">
             <img src="../Images/25870/103.jpg" alt="103.jpg">
           </a>
+          <div class="image-caption"></div>
         </div>
         
 
         <div class="img-wrapper">
-          <a href="../Images/25870/104.jpg" class="glightbox" data-gallery="gallery-25870">
+          <a href="../Images/25870/104.jpg" class="glightbox"
+             data-gallery="gallery-25870"
+             data-title=""
+             data-description=""
+             data-timestamp="">
             <img src="../Images/25870/104.jpg" alt="104.jpg">
           </a>
+          <div class="image-caption"></div>
         </div>
         
 
         <div class="img-wrapper">
-          <a href="../Images/25870/105.jpg" class="glightbox" data-gallery="gallery-25870">
+          <a href="../Images/25870/105.jpg" class="glightbox"
+             data-gallery="gallery-25870"
+             data-title=""
+             data-description=""
+             data-timestamp="">
             <img src="../Images/25870/105.jpg" alt="105.jpg">
           </a>
+          <div class="image-caption"></div>
         </div>
         
 
         <div class="img-wrapper">
-          <a href="../Images/25870/106.png" class="glightbox" data-gallery="gallery-25870">
+          <a href="../Images/25870/106.png" class="glightbox"
+             data-gallery="gallery-25870"
+             data-title=""
+             data-description=""
+             data-timestamp="">
             <img src="../Images/25870/106.png" alt="106.png">
           </a>
+          <div class="image-caption"></div>
         </div>
         
 
         <div class="img-wrapper">
-          <a href="../Images/25870/107.jpg" class="glightbox" data-gallery="gallery-25870">
+          <a href="../Images/25870/107.jpg" class="glightbox"
+             data-gallery="gallery-25870"
+             data-title=""
+             data-description=""
+             data-timestamp="">
             <img src="../Images/25870/107.jpg" alt="107.jpg">
           </a>
+          <div class="image-caption"></div>
         </div>
         
 
         <div class="img-wrapper">
-          <a href="../Images/25870/108.jpg" class="glightbox" data-gallery="gallery-25870">
+          <a href="../Images/25870/108.jpg" class="glightbox"
+             data-gallery="gallery-25870"
+             data-title=""
+             data-description=""
+             data-timestamp="">
             <img src="../Images/25870/108.jpg" alt="108.jpg">
           </a>
+          <div class="image-caption"></div>
         </div>
         
   </div>
@@ -164,7 +195,9 @@
   const lightbox = GLightbox({
     selector: '.glightbox'
   });
+</script>
 
+<script>
   function toggleDarkMode() {
     document.body.classList.toggle('dark-mode');
     localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
@@ -178,13 +211,13 @@
   });
 </script>
 
-<div class="image-gallery">
-  <img src="../Images/25870/103.jpg" alt="103.jpg" style="max-width:100%; margin-bottom:1em;">
-  <img src="../Images/25870/104.jpg" alt="104.jpg" style="max-width:100%; margin-bottom:1em;">
-  <img src="../Images/25870/105.jpg" alt="105.jpg" style="max-width:100%; margin-bottom:1em;">
-  <img src="../Images/25870/106.png" alt="106.png" style="max-width:100%; margin-bottom:1em;">
-  <img src="../Images/25870/107.jpg" alt="107.jpg" style="max-width:100%; margin-bottom:1em;">
-  <img src="../Images/25870/108.jpg" alt="108.jpg" style="max-width:100%; margin-bottom:1em;">
-</div>
+<script>
+function syncFromRender() {
+    fetch("sync_from_upload_server.bat")
+        .then(() => alert("✅ Sync started!"))
+        .catch(() => alert("❌ Sync failed. Check console."));
+}
+</script>
+
 </body>
 </html>

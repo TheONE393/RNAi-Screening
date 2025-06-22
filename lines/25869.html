@@ -9,11 +9,12 @@
 </head>
 <body>
 
-<button class="dark-toggle" onclick="toggleDarkMode()">🌙</button>
+<button class="dark-toggle" onclick="toggleDarkMode()">🌙 Toggle Dark Mode</button>
 <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
 
 <div class="sidebar" id="sidebar">
   <h3>All Lines</h3>
+  <button onclick="syncFromRender()" class="sync-button">🔁 Sync Uploads</button>
   <div class="search-box">
     <input type="text" id="sidebarSearch" placeholder="Search...">
   </div>
@@ -93,37 +94,62 @@
   <div class="image-gallery">
     
         <div class="img-wrapper">
-          <a href="../Images/25869/16.jpg" class="glightbox" data-gallery="gallery-25869">
+          <a href="../Images/25869/16.jpg" class="glightbox"
+             data-gallery="gallery-25869"
+             data-title=""
+             data-description=""
+             data-timestamp="">
             <img src="../Images/25869/16.jpg" alt="16.jpg">
           </a>
+          <div class="image-caption"></div>
         </div>
         
 
         <div class="img-wrapper">
-          <a href="../Images/25869/17.jpg" class="glightbox" data-gallery="gallery-25869">
+          <a href="../Images/25869/17.jpg" class="glightbox"
+             data-gallery="gallery-25869"
+             data-title=""
+             data-description=""
+             data-timestamp="">
             <img src="../Images/25869/17.jpg" alt="17.jpg">
           </a>
+          <div class="image-caption"></div>
         </div>
         
 
         <div class="img-wrapper">
-          <a href="../Images/25869/18.jpg" class="glightbox" data-gallery="gallery-25869">
+          <a href="../Images/25869/18.jpg" class="glightbox"
+             data-gallery="gallery-25869"
+             data-title=""
+             data-description=""
+             data-timestamp="">
             <img src="../Images/25869/18.jpg" alt="18.jpg">
           </a>
+          <div class="image-caption"></div>
         </div>
         
 
         <div class="img-wrapper">
-          <a href="../Images/25869/19.jpg" class="glightbox" data-gallery="gallery-25869">
+          <a href="../Images/25869/19.jpg" class="glightbox"
+             data-gallery="gallery-25869"
+             data-title=""
+             data-description=""
+             data-timestamp="">
             <img src="../Images/25869/19.jpg" alt="19.jpg">
           </a>
+          <div class="image-caption"></div>
         </div>
         
 
         <div class="img-wrapper">
-          <a href="../Images/25869/20.jpg" class="glightbox" data-gallery="gallery-25869">
+          <a href="../Images/25869/20.jpg" class="glightbox"
+             data-gallery="gallery-25869"
+             data-title=""
+             data-description=""
+             data-timestamp="">
             <img src="../Images/25869/20.jpg" alt="20.jpg">
           </a>
+          <div class="image-caption"></div>
         </div>
         
   </div>
@@ -157,7 +183,9 @@
   const lightbox = GLightbox({
     selector: '.glightbox'
   });
+</script>
 
+<script>
   function toggleDarkMode() {
     document.body.classList.toggle('dark-mode');
     localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
@@ -171,12 +199,13 @@
   });
 </script>
 
-<div class="image-gallery">
-  <img src="../Images/25869/16.jpg" alt="16.jpg" style="max-width:100%; margin-bottom:1em;">
-  <img src="../Images/25869/17.jpg" alt="17.jpg" style="max-width:100%; margin-bottom:1em;">
-  <img src="../Images/25869/18.jpg" alt="18.jpg" style="max-width:100%; margin-bottom:1em;">
-  <img src="../Images/25869/19.jpg" alt="19.jpg" style="max-width:100%; margin-bottom:1em;">
-  <img src="../Images/25869/20.jpg" alt="20.jpg" style="max-width:100%; margin-bottom:1em;">
-</div>
+<script>
+function syncFromRender() {
+    fetch("sync_from_upload_server.bat")
+        .then(() => alert("✅ Sync started!"))
+        .catch(() => alert("❌ Sync failed. Check console."));
+}
+</script>
+
 </body>
 </html>

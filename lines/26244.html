@@ -9,11 +9,12 @@
 </head>
 <body>
 
-<button class="dark-toggle" onclick="toggleDarkMode()">🌙</button>
+<button class="dark-toggle" onclick="toggleDarkMode()">🌙 Toggle Dark Mode</button>
 <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
 
 <div class="sidebar" id="sidebar">
   <h3>All Lines</h3>
+  <button onclick="syncFromRender()" class="sync-button">🔁 Sync Uploads</button>
   <div class="search-box">
     <input type="text" id="sidebarSearch" placeholder="Search...">
   </div>
@@ -93,107 +94,182 @@
   <div class="image-gallery">
     
         <div class="img-wrapper">
-          <a href="../Images/26244/10.jpg" class="glightbox" data-gallery="gallery-26244">
+          <a href="../Images/26244/10.jpg" class="glightbox"
+             data-gallery="gallery-26244"
+             data-title=""
+             data-description=""
+             data-timestamp="">
             <img src="../Images/26244/10.jpg" alt="10.jpg">
           </a>
+          <div class="image-caption"></div>
         </div>
         
 
         <div class="img-wrapper">
-          <a href="../Images/26244/6.jpg" class="glightbox" data-gallery="gallery-26244">
+          <a href="../Images/26244/6.jpg" class="glightbox"
+             data-gallery="gallery-26244"
+             data-title=""
+             data-description=""
+             data-timestamp="">
             <img src="../Images/26244/6.jpg" alt="6.jpg">
           </a>
+          <div class="image-caption"></div>
         </div>
         
 
         <div class="img-wrapper">
-          <a href="../Images/26244/7.jpg" class="glightbox" data-gallery="gallery-26244">
+          <a href="../Images/26244/7.jpg" class="glightbox"
+             data-gallery="gallery-26244"
+             data-title=""
+             data-description=""
+             data-timestamp="">
             <img src="../Images/26244/7.jpg" alt="7.jpg">
           </a>
+          <div class="image-caption"></div>
         </div>
         
 
         <div class="img-wrapper">
-          <a href="../Images/26244/8.jpg" class="glightbox" data-gallery="gallery-26244">
+          <a href="../Images/26244/8.jpg" class="glightbox"
+             data-gallery="gallery-26244"
+             data-title=""
+             data-description=""
+             data-timestamp="">
             <img src="../Images/26244/8.jpg" alt="8.jpg">
           </a>
+          <div class="image-caption"></div>
         </div>
         
 
         <div class="img-wrapper">
-          <a href="../Images/26244/86.jpg" class="glightbox" data-gallery="gallery-26244">
+          <a href="../Images/26244/86.jpg" class="glightbox"
+             data-gallery="gallery-26244"
+             data-title=""
+             data-description=""
+             data-timestamp="">
             <img src="../Images/26244/86.jpg" alt="86.jpg">
           </a>
+          <div class="image-caption"></div>
         </div>
         
 
         <div class="img-wrapper">
-          <a href="../Images/26244/87.jpg" class="glightbox" data-gallery="gallery-26244">
+          <a href="../Images/26244/87.jpg" class="glightbox"
+             data-gallery="gallery-26244"
+             data-title=""
+             data-description=""
+             data-timestamp="">
             <img src="../Images/26244/87.jpg" alt="87.jpg">
           </a>
+          <div class="image-caption"></div>
         </div>
         
 
         <div class="img-wrapper">
-          <a href="../Images/26244/88.jpg" class="glightbox" data-gallery="gallery-26244">
+          <a href="../Images/26244/88.jpg" class="glightbox"
+             data-gallery="gallery-26244"
+             data-title=""
+             data-description=""
+             data-timestamp="">
             <img src="../Images/26244/88.jpg" alt="88.jpg">
           </a>
+          <div class="image-caption"></div>
         </div>
         
 
         <div class="img-wrapper">
-          <a href="../Images/26244/89.jpg" class="glightbox" data-gallery="gallery-26244">
+          <a href="../Images/26244/89.jpg" class="glightbox"
+             data-gallery="gallery-26244"
+             data-title=""
+             data-description=""
+             data-timestamp="">
             <img src="../Images/26244/89.jpg" alt="89.jpg">
           </a>
+          <div class="image-caption"></div>
         </div>
         
 
         <div class="img-wrapper">
-          <a href="../Images/26244/9.jpg" class="glightbox" data-gallery="gallery-26244">
+          <a href="../Images/26244/9.jpg" class="glightbox"
+             data-gallery="gallery-26244"
+             data-title=""
+             data-description=""
+             data-timestamp="">
             <img src="../Images/26244/9.jpg" alt="9.jpg">
           </a>
+          <div class="image-caption"></div>
         </div>
         
 
         <div class="img-wrapper">
-          <a href="../Images/26244/91.jpg" class="glightbox" data-gallery="gallery-26244">
+          <a href="../Images/26244/91.jpg" class="glightbox"
+             data-gallery="gallery-26244"
+             data-title=""
+             data-description=""
+             data-timestamp="">
             <img src="../Images/26244/91.jpg" alt="91.jpg">
           </a>
+          <div class="image-caption"></div>
         </div>
         
 
         <div class="img-wrapper">
-          <a href="../Images/26244/92.jpg" class="glightbox" data-gallery="gallery-26244">
+          <a href="../Images/26244/92.jpg" class="glightbox"
+             data-gallery="gallery-26244"
+             data-title=""
+             data-description=""
+             data-timestamp="">
             <img src="../Images/26244/92.jpg" alt="92.jpg">
           </a>
+          <div class="image-caption"></div>
         </div>
         
 
         <div class="img-wrapper">
-          <a href="../Images/26244/93.jpg" class="glightbox" data-gallery="gallery-26244">
+          <a href="../Images/26244/93.jpg" class="glightbox"
+             data-gallery="gallery-26244"
+             data-title=""
+             data-description=""
+             data-timestamp="">
             <img src="../Images/26244/93.jpg" alt="93.jpg">
           </a>
+          <div class="image-caption"></div>
         </div>
         
 
         <div class="img-wrapper">
-          <a href="../Images/26244/94.jpg" class="glightbox" data-gallery="gallery-26244">
+          <a href="../Images/26244/94.jpg" class="glightbox"
+             data-gallery="gallery-26244"
+             data-title=""
+             data-description=""
+             data-timestamp="">
             <img src="../Images/26244/94.jpg" alt="94.jpg">
           </a>
+          <div class="image-caption"></div>
         </div>
         
 
         <div class="img-wrapper">
-          <a href="../Images/26244/95.jpg" class="glightbox" data-gallery="gallery-26244">
+          <a href="../Images/26244/95.jpg" class="glightbox"
+             data-gallery="gallery-26244"
+             data-title=""
+             data-description=""
+             data-timestamp="">
             <img src="../Images/26244/95.jpg" alt="95.jpg">
           </a>
+          <div class="image-caption"></div>
         </div>
         
 
         <div class="img-wrapper">
-          <a href="../Images/26244/96.jpg" class="glightbox" data-gallery="gallery-26244">
+          <a href="../Images/26244/96.jpg" class="glightbox"
+             data-gallery="gallery-26244"
+             data-title=""
+             data-description=""
+             data-timestamp="">
             <img src="../Images/26244/96.jpg" alt="96.jpg">
           </a>
+          <div class="image-caption"></div>
         </div>
         
   </div>
@@ -227,7 +303,9 @@
   const lightbox = GLightbox({
     selector: '.glightbox'
   });
+</script>
 
+<script>
   function toggleDarkMode() {
     document.body.classList.toggle('dark-mode');
     localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
@@ -241,22 +319,13 @@
   });
 </script>
 
-<div class="image-gallery">
-  <img src="../Images/26244/10.jpg" alt="10.jpg" style="max-width:100%; margin-bottom:1em;">
-  <img src="../Images/26244/6.jpg" alt="6.jpg" style="max-width:100%; margin-bottom:1em;">
-  <img src="../Images/26244/7.jpg" alt="7.jpg" style="max-width:100%; margin-bottom:1em;">
-  <img src="../Images/26244/8.jpg" alt="8.jpg" style="max-width:100%; margin-bottom:1em;">
-  <img src="../Images/26244/86.jpg" alt="86.jpg" style="max-width:100%; margin-bottom:1em;">
-  <img src="../Images/26244/87.jpg" alt="87.jpg" style="max-width:100%; margin-bottom:1em;">
-  <img src="../Images/26244/88.jpg" alt="88.jpg" style="max-width:100%; margin-bottom:1em;">
-  <img src="../Images/26244/89.jpg" alt="89.jpg" style="max-width:100%; margin-bottom:1em;">
-  <img src="../Images/26244/9.jpg" alt="9.jpg" style="max-width:100%; margin-bottom:1em;">
-  <img src="../Images/26244/91.jpg" alt="91.jpg" style="max-width:100%; margin-bottom:1em;">
-  <img src="../Images/26244/92.jpg" alt="92.jpg" style="max-width:100%; margin-bottom:1em;">
-  <img src="../Images/26244/93.jpg" alt="93.jpg" style="max-width:100%; margin-bottom:1em;">
-  <img src="../Images/26244/94.jpg" alt="94.jpg" style="max-width:100%; margin-bottom:1em;">
-  <img src="../Images/26244/95.jpg" alt="95.jpg" style="max-width:100%; margin-bottom:1em;">
-  <img src="../Images/26244/96.jpg" alt="96.jpg" style="max-width:100%; margin-bottom:1em;">
-</div>
+<script>
+function syncFromRender() {
+    fetch("sync_from_upload_server.bat")
+        .then(() => alert("✅ Sync started!"))
+        .catch(() => alert("❌ Sync failed. Check console."));
+}
+</script>
+
 </body>
 </html>

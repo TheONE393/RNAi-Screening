@@ -9,11 +9,12 @@
 </head>
 <body>
 
-<button class="dark-toggle" onclick="toggleDarkMode()">🌙</button>
+<button class="dark-toggle" onclick="toggleDarkMode()">🌙 Toggle Dark Mode</button>
 <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
 
 <div class="sidebar" id="sidebar">
   <h3>All Lines</h3>
+  <button onclick="syncFromRender()" class="sync-button">🔁 Sync Uploads</button>
   <div class="search-box">
     <input type="text" id="sidebarSearch" placeholder="Search...">
   </div>
@@ -123,7 +124,9 @@
   const lightbox = GLightbox({
     selector: '.glightbox'
   });
+</script>
 
+<script>
   function toggleDarkMode() {
     document.body.classList.toggle('dark-mode');
     localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
@@ -136,5 +139,14 @@
     }
   });
 </script>
+
+<script>
+function syncFromRender() {
+    fetch("sync_from_upload_server.bat")
+        .then(() => alert("✅ Sync started!"))
+        .catch(() => alert("❌ Sync failed. Check console."));
+}
+</script>
+
 </body>
 </html>

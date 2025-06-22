@@ -1,9 +1,7 @@
 import os
 import sys
 import json
-import re
 from datetime import datetime
-from tkinter import Image
 
 # Optional: specific line to generate
 specific_line = sys.argv[1] if len(sys.argv) > 1 else None
@@ -19,7 +17,7 @@ with open(filenames_path, "r", encoding="utf-8") as f:
     line_ids = [line.strip() for line in f if line.strip()]
 
 # === HTML Page Template ===
-page_template = """<!DOCTYPE html>
+page_template = '''<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -30,11 +28,12 @@ page_template = """<!DOCTYPE html>
 </head>
 <body>
 
-<button class="dark-toggle" onclick="toggleDarkMode()">🌙</button>
+<button class="dark-toggle" onclick="toggleDarkMode()">🌙 Toggle Dark Mode</button>
 <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
 
 <div class="sidebar" id="sidebar">
   <h3>All Lines</h3>
+  <button onclick="syncFromRender()" class="sync-button">🔁 Sync Uploads</button>
   <div class="search-box">
     <input type="text" id="sidebarSearch" placeholder="Search...">
   </div>
@@ -85,29 +84,12 @@ page_template = """<!DOCTYPE html>
     }});
   }});
 
-  const lightbox = GLightbox({
-  selector: '.glightbox',
-  onOpen: () => {
-    setTimeout(() => {
-      document.querySelectorAll('.gdesc').forEach((descBox, index) => {
-        const wrapper = descBox.parentElement;
-        const anchor = document.querySelectorAll('.glightbox')[index];
-        const timestamp = anchor.getAttribute('data-timestamp');
-        const originalDesc = anchor.getAttribute('data-description') || '';
-        
-        // Add timestamp and editable description field
-        const infoDiv = document.createElement('div');
-        infoDiv.innerHTML = `
-          <hr>
-          <p style="font-size:13px;color:#ccc;">🕒 Uploaded on: ${timestamp}</p>
-          <label for="desc-input">📝 Add/Edit Description:</label><br>
-          <textarea rows="3" style="width:100%; margin-top:5px;" placeholder="Write description here...">${originalDesc}</textarea>
-        `;
-        descBox.appendChild(infoDiv);});
-        }, 200);
-      }
-    });
+  const lightbox = GLightbox({{
+    selector: '.glightbox'
+  }});
+</script>
 
+<script>
   function toggleDarkMode() {{
     document.body.classList.toggle('dark-mode');
     localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
@@ -120,9 +102,18 @@ page_template = """<!DOCTYPE html>
     }}
   }});
 </script>
+
+<script>
+function syncFromRender() {{
+    fetch("sync_from_upload_server.bat")
+        .then(() => alert("✅ Sync started!"))
+        .catch(() => alert("❌ Sync failed. Check console."));
+}}
+</script>
+
 </body>
 </html>
-"""
+'''
 
 # === Ensure folders exist ===
 os.makedirs(lines_folder, exist_ok=True)
@@ -133,12 +124,9 @@ for line in line_ids:
         continue
 
     image_folder = os.path.join(images_folder, line)
-
-    # Collect image filenames
     images = [img for img in os.listdir(image_folder)
               if os.path.splitext(img)[1].lower() in valid_ext] if os.path.exists(image_folder) else []
 
-    # Load descriptions (if available)
     desc_path = os.path.join(image_folder, "descriptions.json")
     if os.path.exists(desc_path):
         with open(desc_path, "r", encoding="utf-8") as f:
@@ -147,27 +135,32 @@ for line in line_ids:
         descriptions = {}
 
     image_tags = "\n".join([
-      f'''
-      <div class="img-wrapper">
-        <a href="../Images/{line}/{img}" class="glightbox"
-          data-gallery="gallery-{line}"
-          data-title="{descriptions.get(img, {}).get('caption', '')}"
-          data-description="{descriptions.get(img, {}).get('description', '')}"
-          data-timestamp="{img[:15] if img[0:15].isdigit() else ''}">
-          <img src="../Images/{line}/{img}" alt="{img}">
-        </a>
-        <div class="image-caption">{descriptions.get(img, {}).get('caption', '')}</div>
-      </div>
-      '''
-      for img in images
+        f'''
+        <div class="img-wrapper">
+          <a href="../Images/{line}/{img}" class="glightbox"
+             data-gallery="gallery-{line}"
+             data-title="{descriptions.get(img, {}).get('caption', '')}"
+             data-description="{descriptions.get(img, {}).get('description', '')}"
+             data-timestamp="{img[:15] if img[0:15].isdigit() else ''}">
+            <img src="../Images/{line}/{img}" alt="{img}">
+          </a>
+          <div class="image-caption">{descriptions.get(img, {}).get('caption', '')}</div>
+        </div>
+        '''
+        for img in images
     ])
-
-
 
     sidebar_links = ""
     for other_id in line_ids:
+        if specific_line and other_id != line:
+            continue
+
         other_folder = os.path.join(images_folder, other_id)
-        count = len([img for img in os.listdir(other_folder) if os.path.splitext(img)[1].lower() in valid_ext]) if os.path.exists(other_folder) else 0
+        count = len([
+            img for img in os.listdir(other_folder)
+            if os.path.splitext(img)[1].lower() in valid_ext
+        ]) if os.path.exists(other_folder) else 0
+
         count_span = f'<span class="img-count">{count}</span>' if count > 0 else ""
         active_class = "active-link" if other_id == line else ""
         active_id = 'id="activeLink"' if other_id == line else ""
@@ -177,8 +170,6 @@ for line in line_ids:
             f'<span class="line-name">{other_id}</span>{count_span}</a>\n'
         )
 
-
-
     html_content = page_template.format(
         line=line,
         sidebar_links=sidebar_links,
@@ -186,14 +177,14 @@ for line in line_ids:
     )
 
     output_path = os.path.join(lines_folder, f"{line}.html")
-    with open(output_path, "w", encoding="utf-8") as f:
+    with open(output_path, "w", encoding="utf-8", errors="ignore") as f:
         f.write(html_content)
 
     print(f"✅ Created: {output_path}")
 
 # === Generate Index Page if no specific line ===
 if not specific_line:
-    index_template = """<!DOCTYPE html>
+    index_template = '''<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -250,7 +241,7 @@ if not specific_line:
 
 </body>
 </html>
-"""
+'''
 
     line_rows = ""
     cols_per_row = 5
