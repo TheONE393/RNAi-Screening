@@ -26,7 +26,7 @@ page_template = """<!DOCTYPE html>
 </head>
 <body>
 
-<button class="dark-toggle" onclick="toggleDarkMode()">🌙 Toggle Dark Mode</button>
+<button class="dark-toggle" onclick="toggleDarkMode()">🌙</button>
 <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
 
 <div class="sidebar" id="sidebar">
@@ -160,7 +160,7 @@ if not specific_line:
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <button class="dark-toggle" onclick="toggleDarkMode()">🌙 Toggle Dark Mode</button>
+  <button class="dark-toggle" onclick="toggleDarkMode()">🌙</button>
   <h1 class="page-title">RNAi Line Navigator</h1>
   <p style="text-align:center;">
     <a href="http://127.0.0.1:5000/" target="_blank" class="go-index">📤 Upload Image</a>
