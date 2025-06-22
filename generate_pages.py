@@ -48,6 +48,16 @@ page_template = """<!DOCTYPE html>
 <div class="content">
   <h1 class="page-title">RNAi Line {line}</h1>
   <p style="text-align:center; color:#666;">Notes and images for line {line}.</p>
+
+  <div class="upload-box">
+    <form action="http://127.0.0.1:5000/upload" method="post" enctype="multipart/form-data" target="_blank">
+      <input type="file" name="images" multiple required>
+      <input type="hidden" name="line_id" value="{line}">
+      <button type="submit">📤 Upload Images to {line}</button>
+    </form>
+  </div>
+
+
   <div class="image-gallery">
     {image_tags}
   </div>
