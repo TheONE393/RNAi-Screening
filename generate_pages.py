@@ -56,8 +56,6 @@ page_template = """<!DOCTYPE html>
       <button type="submit">📤 Upload Images to {line}</button>
     </form>
   </div>
-
-
   <div class="image-gallery">
     {image_tags}
   </div>
