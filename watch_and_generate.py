@@ -1,5 +1,3 @@
-# watch_and_generate.py
-
 import time
 import subprocess
 import os
@@ -9,6 +7,18 @@ from watchdog.events import FileSystemEventHandler
 WATCHED_DIR = "Images"
 valid_ext = ('.jpg', '.jpeg', '.png', '.gif', '.webp')
 
+# Cooldown memory
+last_trigger_times = {}
+
+def should_trigger(line_id, cooldown=3):
+    """Avoid multiple triggers for same line within `cooldown` seconds."""
+    now = time.time()
+    last_time = last_trigger_times.get(line_id, 0)
+    if now - last_time < cooldown:
+        return False
+    last_trigger_times[line_id] = now
+    return True
+
 class ImageHandler(FileSystemEventHandler):
     def process(self, event):
         if event.is_directory:
@@ -16,13 +26,13 @@ class ImageHandler(FileSystemEventHandler):
 
         ext = os.path.splitext(event.src_path)[1].lower()
         if ext not in valid_ext:
-            return  # ❗ Ignore non-image files
+            return
 
-        # Confirm file really exists (some intermediate tmp files may trigger event)
+        # Confirm file really exists (ignore temp/cache triggers)
         if not os.path.exists(event.src_path):
             return
 
-        # Determine line ID from path
+        # Get line ID from path
         rel_path = os.path.relpath(event.src_path, WATCHED_DIR)
         parts = rel_path.split(os.sep)
         if len(parts) < 2:
@@ -30,9 +40,11 @@ class ImageHandler(FileSystemEventHandler):
             return
 
         line_id = parts[0]
+        if not should_trigger(line_id):
+            return  # ❗ Too soon to trigger again for this line
+
         print(f"\n📸 Detected image change in line {line_id}")
         run_scripts_for_line(line_id)
-
 
     def on_created(self, event):
         self.process(event)
@@ -42,7 +54,6 @@ class ImageHandler(FileSystemEventHandler):
 
 def run_scripts_for_line(line_id):
     print(f"⚙️ Updating HTML and image insertion for: {line_id}")
-
     subprocess.run(["python", "auto_insert_images.py", line_id])
     subprocess.run(["python", "generate_pages.py", line_id])
 
