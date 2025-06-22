@@ -22,15 +22,22 @@ HTML_TEMPLATE = '''
 def upload_file():
     if request.method == 'POST':
         line_name = request.form['line_name'].strip().replace(" ", "_")
-        file = request.files['file']
-        if file:
-            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-            filename = f"{timestamp}_{file.filename}"
-            save_path = os.path.join(UPLOAD_FOLDER, line_name)
-            os.makedirs(save_path, exist_ok=True)
-            file.save(os.path.join(save_path, filename))
-            return f"✅ Uploaded to <b>{line_name}</b>!"
+        files = request.files.getlist('file')  # Handle multiple files
+        save_path = os.path.join(UPLOAD_FOLDER, line_name)
+        os.makedirs(save_path, exist_ok=True)
+
+        uploaded = 0
+        for file in files:
+            if file:
+                timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+                filename = f"{timestamp}_{file.filename}"
+                file.save(os.path.join(save_path, filename))
+                uploaded += 1
+
+        return f"✅ Uploaded <b>{uploaded}</b> file(s) to <b>{line_name}</b>!"
+    
     return render_template_string(HTML_TEMPLATE)
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)  # Accepts external connections on LAN if needed
