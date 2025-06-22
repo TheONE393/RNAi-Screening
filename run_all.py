@@ -20,18 +20,18 @@ def run_upload_server():
     subprocess.run(["python", "upload_server.py"])
 
 if __name__ == "__main__":
-    # Start upload server
-    t1 = threading.Thread(target=run_upload_server)
+    # Start folder watch
+    t1 = threading.Thread(target=run_watch_and_generate)
     t1.daemon = True
     t1.start()
 
-    # Start folder watch
-    t2 = threading.Thread(target=run_watch_and_generate)
+    # Start Git auto-push
+    t2 = threading.Thread(target=run_auto_push_loop)
     t2.daemon = True
     t2.start()
 
-    # Start Git auto-push
-    t3 = threading.Thread(target=run_auto_push_loop)
+    # Start upload server
+    t3 = threading.Thread(target=run_upload_server)
     t3.daemon = True
     t3.start()
 
