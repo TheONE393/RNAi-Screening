@@ -125,9 +125,6 @@ for line in line_ids:
 
     sidebar_links = ""
     for other_id in line_ids:
-        if specific_line and other_id != line:
-            continue  # Only include current line’s link if updating a specific one
-
         other_folder = os.path.join(images_folder, other_id)
         count = len([img for img in os.listdir(other_folder) if os.path.splitext(img)[1].lower() in valid_ext]) if os.path.exists(other_folder) else 0
         count_span = f'<span class="img-count">{count}</span>' if count > 0 else ""
@@ -138,6 +135,7 @@ for line in line_ids:
             f'<a href="{other_id}.html" class="sidebar-link {active_class}" {active_id}>'
             f'<span class="line-name">{other_id}</span>{count_span}</a>\n'
         )
+
 
 
     html_content = page_template.format(
