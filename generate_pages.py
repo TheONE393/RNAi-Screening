@@ -140,7 +140,7 @@ for line in line_ids:
           <a href="../Images/{line}/{img}" class="glightbox"
              data-gallery="gallery-{line}"
              data-title="{descriptions.get(img, {}).get('caption', '')}"
-             data-description="{descriptions.get(img, {}).get('description', '')}"
+             data-description="{descriptions.get(img, {}).get('description', '')}<br><small><i>Uploaded: {img[:15]}</i></small>" if img[:15].isdigit() else ""
              data-timestamp="{img[:15] if img[0:15].isdigit() else ''}">
             <img src="../Images/{line}/{img}" alt="{img}">
           </a>
