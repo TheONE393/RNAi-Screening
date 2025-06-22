@@ -139,6 +139,7 @@ for line in line_ids:
             f'<span class="line-name">{other_id}</span>{count_span}</a>\n'
         )
 
+
     html_content = page_template.format(
         line=line,
         sidebar_links=sidebar_links,
