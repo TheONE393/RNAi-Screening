@@ -20,7 +20,7 @@ class ImageHandler(FileSystemEventHandler):
         if ext.lower() not in VALID_EXTS:
             return
 
-        # Get line ID
+        # Get line ID from image path
         rel_path = os.path.relpath(event.src_path, WATCHED_DIR)
         parts = rel_path.split(os.sep)
         if len(parts) < 2:

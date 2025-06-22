@@ -1,4 +1,8 @@
 import os
+import sys
+
+# Optional: specific line to generate
+specific_line = sys.argv[1] if len(sys.argv) > 1 else None
 
 # === CONFIGURATION ===
 lines_folder = "lines"
@@ -6,19 +10,9 @@ images_folder = "Images"
 filenames_path = "filenames.txt"
 valid_ext = ['.jpg', '.jpeg', '.png', '.gif', '.webp']
 
-# === Load RNAi Line IDs ===
+# === Load Line IDs ===
 with open(filenames_path, "r", encoding="utf-8") as f:
     line_ids = [line.strip() for line in f if line.strip()]
-
-# === Ensure all image folders exist and have a .gitkeep if empty ===
-for line in line_ids:
-    folder_path = os.path.join(images_folder, line)
-    os.makedirs(folder_path, exist_ok=True)
-    is_empty = not any(fname for fname in os.listdir(folder_path) if not fname.startswith("."))
-    if is_empty:
-        with open(os.path.join(folder_path, ".gitkeep"), "w") as f:
-            f.write("")
-        print(f"📝 Added .gitkeep to empty folder: {folder_path}")
 
 # === HTML Page Template ===
 page_template = """<!DOCTYPE html>
@@ -50,12 +44,13 @@ page_template = """<!DOCTYPE html>
   <p style="text-align:center; color:#666;">Notes and images for line {line}.</p>
 
   <div class="upload-box">
-    <form action="http://127.0.0.1:5000/upload" method="post" enctype="multipart/form-data" target="_blank">
-      <input type="file" name="images" multiple required>
-      <input type="hidden" name="line_id" value="{line}">
+    <form action="http://127.0.0.1:5000/" method="post" enctype="multipart/form-data" target="_blank">
+      <input type="text" name="line_name" value="{line}" hidden>
+      <input type="file" name="file" multiple required>
       <button type="submit">📤 Upload Images to {line}</button>
     </form>
   </div>
+
   <div class="image-gallery">
     {image_tags}
   </div>
@@ -89,9 +84,7 @@ page_template = """<!DOCTYPE html>
   const lightbox = GLightbox({{
     selector: '.glightbox'
   }});
-</script>
 
-<script>
   function toggleDarkMode() {{
     document.body.classList.toggle('dark-mode');
     localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
@@ -104,33 +97,37 @@ page_template = """<!DOCTYPE html>
     }}
   }});
 </script>
-
 </body>
 </html>
 """
 
-
-# === Generate Each Line Page ===
+# === Ensure folders exist ===
 os.makedirs(lines_folder, exist_ok=True)
 
+# === Generate Each Line Page ===
 for line in line_ids:
+    if specific_line and line != specific_line:
+        continue
+
     image_folder = os.path.join(images_folder, line)
     images = [img for img in os.listdir(image_folder) if os.path.splitext(img)[1].lower() in valid_ext] if os.path.exists(image_folder) else []
 
     image_tags = "\n".join([
-      f'''
-      <div class="img-wrapper">
-        <a href="../Images/{line}/{img}" class="glightbox" data-gallery="gallery-{line}">
-          <img src="../Images/{line}/{img}" alt="{img}">
-        </a>
-      </div>
-      ''' 
-      for img in images
+        f'''
+        <div class="img-wrapper">
+          <a href="../Images/{line}/{img}" class="glightbox" data-gallery="gallery-{line}">
+            <img src="../Images/{line}/{img}" alt="{img}">
+          </a>
+        </div>
+        '''
+        for img in images
     ])
-
 
     sidebar_links = ""
     for other_id in line_ids:
+        if specific_line and other_id != line:
+            continue  # Only include current line’s link if updating a specific one
+
         other_folder = os.path.join(images_folder, other_id)
         count = len([img for img in os.listdir(other_folder) if os.path.splitext(img)[1].lower() in valid_ext]) if os.path.exists(other_folder) else 0
         count_span = f'<span class="img-count">{count}</span>' if count > 0 else ""
@@ -142,25 +139,21 @@ for line in line_ids:
             f'<span class="line-name">{other_id}</span>{count_span}</a>\n'
         )
 
-    # Format the HTML content with the current line's data
-    try:
-        html_content = page_template.format(
-            line=line,
-            sidebar_links=sidebar_links,
-            image_tags=image_tags
-        )
-    except ValueError as e:
-        print(f"❌ Error formatting HTML for line {line}: {e}")
-        continue  # Skip this line and move to the next
+    html_content = page_template.format(
+        line=line,
+        sidebar_links=sidebar_links,
+        image_tags=image_tags
+    )
 
-    # Write the formatted HTML content to a file
     output_path = os.path.join(lines_folder, f"{line}.html")
     with open(output_path, "w", encoding="utf-8") as f:
         f.write(html_content)
 
     print(f"✅ Created: {output_path}")
 
-index_template = """<!DOCTYPE html>
+# === Generate Index Page if no specific line ===
+if not specific_line:
+    index_template = """<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -201,9 +194,7 @@ index_template = """<!DOCTYPE html>
       row.style.display = visibleInRow ? '' : 'none';
     }});
   }});
-</script>
 
-<script>
   function toggleDarkMode() {{
     document.body.classList.toggle('dark-mode');
     localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
@@ -221,20 +212,17 @@ index_template = """<!DOCTYPE html>
 </html>
 """
 
+    line_rows = ""
+    cols_per_row = 5
+    for i in range(0, len(line_ids), cols_per_row):
+        row = line_ids[i:i + cols_per_row]
+        row_html = '<div class="index-row">\n'
+        for line_id in row:
+            row_html += f'<div class="index-cell"><a class="line-card" href="lines/{line_id}.html">{line_id}</a></div>\n'
+        row_html += '</div>\n'
+        line_rows += row_html
 
-# === Build index rows ===
-line_rows = ""
-cols_per_row = 5
+    with open("index.html", "w", encoding="utf-8") as f:
+        f.write(index_template.format(line_rows=line_rows))
 
-for i in range(0, len(line_ids), cols_per_row):
-    row = line_ids[i:i + cols_per_row]
-    row_html = '<div class="index-row">\n'
-    for line_id in row:
-        row_html += f'<div class="index-cell"><a class="line-card" href="lines/{line_id}.html">{line_id}</a></div>\n'
-    row_html += '</div>\n'
-    line_rows += row_html
-
-with open("index.html", "w", encoding="utf-8") as f:
-    f.write(index_template.format(line_rows=line_rows))
-
-print("✅ Created: index.html")
+    print("✅ Created: index.html")

@@ -1,25 +1,36 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, render_template_string
 import os
+from datetime import datetime
 
 app = Flask(__name__)
-UPLOAD_FOLDER = "Images"
 
-@app.route("/upload", methods=["POST"])
-def upload():
-    line_id = request.form.get("line_id")
-    files = request.files.getlist("images")
+UPLOAD_FOLDER = 'Images'
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
-    if not line_id or not files:
-        return "Missing line_id or files", 400
+HTML_TEMPLATE = '''
+<!doctype html>
+<title>RNAi Image Uploader</title>
+<h2>Upload Image for RNAi Line</h2>
+<form method=post enctype=multipart/form-data>
+  Line Name: <input type=text name=line_name required><br><br>
+  <input type=file name=file required>
+  <input type=submit value=Upload>
+</form>
+'''
 
-    save_dir = os.path.join(UPLOAD_FOLDER, line_id)
-    os.makedirs(save_dir, exist_ok=True)
+@app.route('/', methods=['GET', 'POST'])
+def upload_file():
+    if request.method == 'POST':
+        line_name = request.form['line_name'].strip().replace(" ", "_")
+        file = request.files['file']
+        if file:
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            filename = f"{timestamp}_{file.filename}"
+            save_path = os.path.join(UPLOAD_FOLDER, line_name)
+            os.makedirs(save_path, exist_ok=True)
+            file.save(os.path.join(save_path, filename))
+            return f"✅ Uploaded to <b>{line_name}</b>!"
+    return render_template_string(HTML_TEMPLATE)
 
-    for file in files:
-        filepath = os.path.join(save_dir, file.filename)
-        file.save(filepath)
-
-    return f"✅ Uploaded {len(files)} image(s) to line {line_id}"
-
-if __name__ == "__main__":
-    app.run(debug=True)
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000)  # Accepts external connections on LAN if needed

@@ -209,6 +209,47 @@ body {
   background-color: #388e3c;
 }
 
+/* === Upload Box === */
+.upload-box {
+  text-align: center;
+  margin-bottom: 2em;
+}
+
+.upload-box input[type="file"] {
+  margin-right: 7em;
+}
+
+.upload-box button {
+  background-color: #6e8efb;
+  color: white;
+  padding: 8px 14px;
+  font-size: 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.upload-box button:hover {
+  background-color: #4c6ef5;
+}
+
+/* === Sync Button === */
+.sync-button {
+  margin-top: 10px;
+  padding: 10px;
+  background-color: #1e90ff;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  width: 90%;
+}
+
+.sync-button:hover {
+  background-color: #0b72cc;
+}
+
 /* === Dark Mode === */
 body.dark-mode {
   background-color: #1e1e1e;
@@ -244,7 +285,7 @@ body.dark-mode .sidebar-link:hover {
   background-color: #3a3a3a;
 }
 
-/* === Dark Mode Toggle Button === */
+/* === Dark Mode Toggle === */
 .dark-toggle {
   position: fixed;
   top: 10px;
@@ -291,27 +332,4 @@ body.dark-mode .sidebar-link:hover {
     padding: 12px 16px;
     font-size: 15px;
   }
-}
-.upload-box {
-  text-align: center;
-  margin-bottom: 2em auto;
-}
-
-.upload-box input[type="file"] {
-  margin-right: 7em;
-}
-
-.upload-box button {
-  background-color: #6e8efb;
-  color: white;
-  padding: 8px 14px;
-  font-size: 14px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.upload-box button:hover {
-  background-color: #4c6ef5;
 }

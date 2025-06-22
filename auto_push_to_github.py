@@ -3,7 +3,7 @@ import datetime
 
 # === Git Commands ===
 try:
-    # Add all changes
+    # Stage all changes
     subprocess.run(["git", "add", "."], check=True)
 
     # Commit with timestamp
