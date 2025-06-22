@@ -147,20 +147,21 @@ for line in line_ids:
         descriptions = {}
 
     image_tags = "\n".join([
-        f'''
-        <div class="img-wrapper">
-          <a href="../Images/{line}/{img}" class="glightbox"
-             data-gallery="gallery-{line}"
-             data-title="{descriptions.get(img, {}).get('caption', '')}"
-             data-description="{descriptions.get(img, {}).get('description', '')}"
-             data-timestamp="{img[:15] if img[0:15].isdigit() else ''}">
-            <img src="../Images/{line}/{img}" alt="{img}">
-          </a>
-          <div class="image-caption">{descriptions.get(img, {}).get('caption', '')}</div>
-        </div>
-        '''
-        for img in images
+      f'''
+      <div class="img-wrapper">
+        <a href="../Images/{line}/{img}" class="glightbox"
+          data-gallery="gallery-{line}"
+          data-title="{descriptions.get(img, {}).get('caption', '')}"
+          data-description="{descriptions.get(img, {}).get('description', '')}"
+          data-timestamp="{img[:15] if img[0:15].isdigit() else ''}">
+          <img src="../Images/{line}/{img}" alt="{img}">
+        </a>
+        <div class="image-caption">{descriptions.get(img, {}).get('caption', '')}</div>
+      </div>
+      '''
+      for img in images
     ])
+
 
 
     sidebar_links = ""
