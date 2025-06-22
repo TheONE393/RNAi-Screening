@@ -1,38 +1,26 @@
+import os
 import time
 import subprocess
-import os
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
 WATCHED_DIR = "Images"
-valid_ext = ('.jpg', '.jpeg', '.png', '.gif', '.webp')
-
-# Cooldown memory
-last_trigger_times = {}
-
-def should_trigger(line_id, cooldown=3):
-    """Avoid multiple triggers for same line within `cooldown` seconds."""
-    now = time.time()
-    last_time = last_trigger_times.get(line_id, 0)
-    if now - last_time < cooldown:
-        return False
-    last_trigger_times[line_id] = now
-    return True
+VALID_EXTS = ('.jpg', '.jpeg', '.png', '.gif', '.webp')
+DEBOUNCE_SECONDS = 5
+last_event_time = 0
+pending_lines = set()
 
 class ImageHandler(FileSystemEventHandler):
     def process(self, event):
+        global last_event_time
         if event.is_directory:
             return
 
-        ext = os.path.splitext(event.src_path)[1].lower()
-        if ext not in valid_ext:
+        _, ext = os.path.splitext(event.src_path)
+        if ext.lower() not in VALID_EXTS:
             return
 
-        # Confirm file really exists (ignore temp/cache triggers)
-        if not os.path.exists(event.src_path):
-            return
-
-        # Get line ID from path
+        # Get line ID
         rel_path = os.path.relpath(event.src_path, WATCHED_DIR)
         parts = rel_path.split(os.sep)
         if len(parts) < 2:
@@ -40,11 +28,8 @@ class ImageHandler(FileSystemEventHandler):
             return
 
         line_id = parts[0]
-        if not should_trigger(line_id):
-            return  # ❗ Too soon to trigger again for this line
-
-        print(f"\n📸 Detected image change in line {line_id}")
-        run_scripts_for_line(line_id)
+        pending_lines.add(line_id)
+        last_event_time = time.time()
 
     def on_created(self, event):
         self.process(event)
@@ -52,26 +37,36 @@ class ImageHandler(FileSystemEventHandler):
     def on_modified(self, event):
         self.process(event)
 
-def run_scripts_for_line(line_id):
-    print(f"⚙️ Updating HTML and image insertion for: {line_id}")
+def run_update_scripts(line_id):
+    print(f"🔄 Updating for line {line_id}")
     subprocess.run(["python", "auto_insert_images.py", line_id])
     subprocess.run(["python", "generate_pages.py", line_id])
 
-if __name__ == "__main__":
-    print("🕹️ Initial scan of all folders...")
-    subprocess.run(["python", "auto_insert_images.py"])
-    subprocess.run(["python", "generate_pages.py"])
+def push_to_github():
+    print("📤 Pushing changes to GitHub...")
+    subprocess.run(["python", "auto_push_to_github.py"])
 
-    print(f"👀 Watching for changes in: {WATCHED_DIR}/ (including subfolders)")
+if __name__ == "__main__":
+    print("🕹️ Initial run...")
+    subprocess.run(["python", "auto_insert_images.py"])
+    subprocess.Popen(["python", "generate_pages.py"])
 
     event_handler = ImageHandler()
     observer = Observer()
     observer.schedule(event_handler, WATCHED_DIR, recursive=True)
     observer.start()
 
+    print(f"👀 Watching {WATCHED_DIR}/")
+
     try:
         while True:
             time.sleep(1)
+            now = time.time()
+            if pending_lines and now - last_event_time > DEBOUNCE_SECONDS:
+                for line_id in pending_lines.copy():
+                    run_update_scripts(line_id)
+                push_to_github()
+                pending_lines.clear()
     except KeyboardInterrupt:
         observer.stop()
     observer.join()
