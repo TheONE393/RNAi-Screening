@@ -1,37 +1,41 @@
 import subprocess
+import threading
 import time
-import signal
-import sys
+import os
 
-# Keep references to subprocesses
-processes = []
+# Determine base directory (where this script is located)
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-def run_script(script_name):
-    print(f"🔁 Starting {script_name}...")
-    process = subprocess.Popen(["python", script_name])
-    processes.append(process)
+def run_watch_and_generate():
+    print("🔁 Starting watch_and_generate.py...")
+    subprocess.run(["python", os.path.join(BASE_DIR, "watch_and_generate.py")])
 
-def terminate_all():
-    print("\n🛑 Terminating all subprocesses...")
-    for proc in processes:
-        if proc.poll() is None:  # Still running
-            proc.terminate()
-            try:
-                proc.wait(timeout=5)
-            except subprocess.TimeoutExpired:
-                proc.kill()
-    print("✅ All subprocesses terminated. Exiting cleanly.")
-    sys.exit(0)
+def run_auto_push_loop(interval=300):
+    try:
+        while True:
+            print("🔁 Running auto_push_to_github.py...")
+            subprocess.run(["python", os.path.join(BASE_DIR, "auto_push_to_github.py")])
+            time.sleep(interval)
+    except Exception as e:
+        print(f"❌ Auto-push thread error: {e}")
+
+def run_upload_server():
+    print("🔁 Starting upload_server.py...")
+    subprocess.run(["python", os.path.join(BASE_DIR, "upload_server.py")])
 
 if __name__ == "__main__":
     try:
-        run_script("upload_server.py")
-        time.sleep(1)  # Let Flask start
-        run_script("watch_and_generate.py")
+        t1 = threading.Thread(target=run_watch_and_generate)
+        t2 = threading.Thread(target=run_auto_push_loop)
+        t3 = threading.Thread(target=run_upload_server)
 
-        # Keep main alive
-        while True:
-            time.sleep(1)
+        t1.start()
+        t2.start()
+        t3.start()
+
+        t1.join()
+        t2.join()
+        t3.join()
 
     except KeyboardInterrupt:
-        terminate_all()
+        print("🛑 Received exit signal. Shutting down gracefully...")

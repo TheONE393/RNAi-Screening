@@ -40,7 +40,7 @@ class ImageHandler(FileSystemEventHandler):
 def run_update_scripts(line_id):
     print(f"🔄 Updating for line {line_id}")
     subprocess.run(["python", "auto_insert_images.py", line_id])
-    subprocess.run(["python", "generate_pages.py", line_id])
+    subprocess.Popen(["python", "generate_pages.py", line_id])
 
 def push_to_github():
     print("📤 Pushing changes to GitHub...")
