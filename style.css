@@ -292,3 +292,26 @@ body.dark-mode .sidebar-link:hover {
     font-size: 15px;
   }
 }
+.upload-box {
+  text-align: center;
+  margin-bottom: 1.5em;
+}
+
+.upload-box input[type="file"] {
+  margin-right: 1em;
+}
+
+.upload-box button {
+  background-color: #6e8efb;
+  color: white;
+  padding: 8px 14px;
+  font-size: 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.upload-box button:hover {
+  background-color: #4c6ef5;
+}
