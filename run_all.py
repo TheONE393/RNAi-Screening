@@ -5,6 +5,7 @@ import os
 
 # Determine base directory (where this script is located)
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+print(f"🚀 RNAi Automation started from: {BASE_DIR}")
 
 def run_watch_and_generate():
     print("🔁 Starting watch_and_generate.py...")
