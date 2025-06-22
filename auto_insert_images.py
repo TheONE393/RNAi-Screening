@@ -31,8 +31,10 @@ for html_file in os.listdir(lines_folder):
 
     image_html = '\n<div class="image-gallery">\n'
     for img in sorted(image_files):
-        rel_path = f"../Images/{line_id}/{img}"
-        image_html += f'  <img src="{rel_path}" alt="{img}" style="max-width:100%; margin-bottom:1em;">\n'
+        image_html += f'''  <div class="image-caption-container">
+    <img src="../Images/{line_id}/{img}" alt="{img}" style="max-width:200px;"><br>
+    <div class="image-caption">{img}</div>
+  </div>\n'''
     image_html += '</div>\n'
 
     with open(html_path, "r", encoding="utf-8") as f:
