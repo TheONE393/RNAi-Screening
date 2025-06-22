@@ -4,9 +4,7 @@ import threading
 import time
 import os
 
-def run_upload_server():
-    print("🚀 Starting upload_server.py...")
-    subprocess.run(["python", "upload_server.py"])
+
 
 def run_watch_and_generate():
     print("👀 Starting watch_and_generate.py...")
@@ -17,6 +15,9 @@ def run_auto_push_loop(interval=300):  # every 5 minutes
         print("🔄 Running auto_push_to_github.py...")
         subprocess.run(["python", "auto_push_to_github.py"])
         time.sleep(interval)
+def run_upload_server():
+    print("🚀 Starting upload_server.py...")
+    subprocess.run(["python", "upload_server.py"])
 
 if __name__ == "__main__":
     # Start upload server
