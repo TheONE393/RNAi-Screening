@@ -3,6 +3,7 @@ import sys
 import json
 import re
 from datetime import datetime
+from tkinter import Image
 
 # Optional: specific line to generate
 specific_line = sys.argv[1] if len(sys.argv) > 1 else None
@@ -132,30 +133,35 @@ for line in line_ids:
         continue
 
     image_folder = os.path.join(images_folder, line)
-    # Load descriptions.json if it exists
+
+    # Collect image filenames
+    images = [img for img in os.listdir(image_folder)
+              if os.path.splitext(img)[1].lower() in valid_ext] if os.path.exists(image_folder) else []
+
+    # Load descriptions (if available)
     desc_path = os.path.join(image_folder, "descriptions.json")
     if os.path.exists(desc_path):
-      with open(desc_path, "r", encoding="utf-8") as f:
-        descriptions = json.load(f)
+        with open(desc_path, "r", encoding="utf-8") as f:
+            descriptions = json.load(f)
     else:
-      descriptions = {}
-
-    images = [img for img in os.listdir(image_folder) if os.path.splitext(img)[1].lower() in valid_ext] if os.path.exists(image_folder) else []
+        descriptions = {}
 
     image_tags = "\n".join([
-      f'''
-      <div class="img-wrapper">
-        <a href="../Images/{line}/{img}" class="glightbox" data-gallery="gallery-{line}"
-          data-title="{descriptions.get(img, {}).get("caption", img)}"
-          data-description="{descriptions.get(img, {}).get("description", "")}"
-          data-timestamp="{datetime.strptime(img.split("_")[0] + "_" + img.split("_")[1], "%Y%m%d_%H%M%S").strftime('%Y-%m-%d %H:%M:%S') if re.match(r'\\d{{8}}_\\d{{6}}', img) else ''}">
-          <img src="../Images/{line}/{img}" alt="{descriptions.get(img, {}).get("caption", img)}">
-          <div class="image-caption">{descriptions.get(img, {}).get("caption", img)}</div>
-        </a>
-      </div>
-      '''
-      for img in images
+        f'''
+        <div class="img-wrapper">
+          <a href="../Images/{line}/{img}" class="glightbox"
+             data-gallery="gallery-{line}"
+             data-title="{descriptions.get(img, {}).get('caption', '')}"
+             data-description="{descriptions.get(img, {}).get('description', '')}"
+             data-timestamp="{img[:15] if img[0:15].isdigit() else ''}">
+            <img src="../Images/{line}/{img}" alt="{img}">
+          </a>
+          <div class="image-caption">{descriptions.get(img, {}).get('caption', '')}</div>
+        </div>
+        '''
+        for img in images
     ])
+
 
     sidebar_links = ""
     for other_id in line_ids:
