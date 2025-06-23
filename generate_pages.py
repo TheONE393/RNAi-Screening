@@ -138,19 +138,19 @@ for line in line_ids:
     ] if os.path.exists(image_folder) else []
 
     if valid_images:
-          image_tags = "\n".join([
-              f'''
-              <div class="img-wrapper">
-                <a href="../Images/{line}/{img}" class="glightbox"
-            data-gallery="gallery-{line}"
-            data-title="{descriptions.get(img, {}).get('caption', '')}"
-            data-description="{descriptions.get(img, {}).get('description', '')}<br><small><i>Uploaded: {datetime.fromtimestamp(os.path.getmtime(os.path.join(image_folder, img))).strftime('%Y-%m-%d %H:%M')}</i></small>">
-            <img src="../Images/{line}/{img}" alt="{img}">
-                </a>
-                <div class="image-caption">{descriptions.get(img, {}).get('caption', '')}</div>
-              </div>
-              ''' for img in valid_images
-          ])
+        image_tags = "\n".join([
+            f'''
+            <div class="img-wrapper">
+              <a href="../Images/{line}/{img}" class="glightbox"
+                  data-gallery="gallery-{line}"
+                  data-title="{descriptions.get(img, {}).get('caption', '') or os.path.splitext(img)[0]}"
+                  data-description="{descriptions.get(img, {}).get('description', '')}<br><small><i>Uploaded: {datetime.fromtimestamp(os.path.getmtime(os.path.join(image_folder, img))).strftime('%Y-%m-%d %H:%M')}</i></small>">
+                <img src="../Images/{line}/{img}" alt="{img}">
+              </a>
+              <div class="image-caption">{descriptions.get(img, {}).get('caption', '') or os.path.splitext(img)[0]}</div>
+            </div>
+            ''' for img in valid_images
+        ])
     else:
         image_tags = "<p style='text-align:center; color:#999;'>No images available for this line.</p>"
 
