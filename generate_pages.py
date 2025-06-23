@@ -134,47 +134,56 @@ for line in line_ids:
     else:
         descriptions = {}
 
+# Filter out non-existing or invalid image files
+valid_images = [
+    img for img in os.listdir(image_folder)
+    if os.path.splitext(img)[1].lower() in valid_ext
+    and os.path.isfile(os.path.join(image_folder, img))
+]
+
+if valid_images:
     image_tags = "\n".join([
         f'''
         <div class="img-wrapper">
           <a href="../Images/{line}/{img}" class="glightbox"
              data-gallery="gallery-{line}"
-             data-title="{descriptions.get(img, {}).get('caption', '')}"
-             data-description="{descriptions.get(img, {}).get('description', '')}<br><small><i>Uploaded: {img[:15]}</i></small>" if img[:15].isdigit() else ""
-             data-timestamp="{img[:15] if img[0:15].isdigit() else ''}">
+             data-title="{{{{descriptions.get('{img}', {{}}).get('caption', '')}}}}"
+             data-description="{{{{descriptions.get('{img}', {{}}).get('description', '')}}}}<br><small><i>Uploaded: {img[:15]}</i></small>" if img[:15].isdigit() else "{{{{descriptions.get('{img}', {{}}).get('description', '')}}}}">
             <img src="../Images/{line}/{img}" alt="{img}">
           </a>
-          <div class="image-caption">{descriptions.get(img, {}).get('caption', '')}</div>
+          <div class="image-caption">{{{{descriptions.get('{img}', {{}}).get('caption', '')}}}}</div>
         </div>
         '''
-        for img in images
+        for img in valid_images
     ])
+else:
+    image_tags = "<p style='text-align:center; color:#999;'>No images available for this line.</p>"
 
+# Sidebar Links — Always regenerate for all lines
     sidebar_links = ""
     for other_id in line_ids:
-        if specific_line and other_id != line:
-            continue
+      other_folder = os.path.join(images_folder, other_id)
+      count = len([
+        img for img in os.listdir(other_folder)
+        if os.path.splitext(img)[1].lower() in valid_ext
+        and os.path.isfile(os.path.join(other_folder, img))
+      ]) if os.path.exists(other_folder) else 0
 
-        other_folder = os.path.join(images_folder, other_id)
-        count = len([
-            img for img in os.listdir(other_folder)
-            if os.path.splitext(img)[1].lower() in valid_ext
-        ]) if os.path.exists(other_folder) else 0
+      count_span = f'<span class="img-count">{count}</span>' if count > 0 else ""
+      active_class = "active-link" if other_id == line else ""
+      active_id = 'id="activeLink"' if other_id == line else ""
 
-        count_span = f'<span class="img-count">{count}</span>' if count > 0 else ""
-        active_class = "active-link" if other_id == line else ""
-        active_id = 'id="activeLink"' if other_id == line else ""
+      sidebar_links += (
+        f'<a href="{other_id}.html" class="sidebar-link {active_class}" {active_id}>'
+        f'<span class="line-name">{other_id}</span>{count_span}</a>\n'
+      )
 
-        sidebar_links += (
-            f'<a href="{other_id}.html" class="sidebar-link {active_class}" {active_id}>'
-            f'<span class="line-name">{other_id}</span>{count_span}</a>\n'
-        )
-
+    # Final HTML output
     html_content = page_template.format(
-        line=line,
-        sidebar_links=sidebar_links,
-        image_tags=image_tags
-    )
+      line=line,
+      sidebar_links=sidebar_links,
+      image_tags=image_tags
+)
 
     output_path = os.path.join(lines_folder, f"{line}.html")
     with open(output_path, "w", encoding="utf-8", errors="ignore") as f:
