@@ -85,7 +85,7 @@ page_template = '''<!DOCTYPE html>
   }});
 
   const lightbox = GLightbox({{
-    selector: '.glightbox'
+    selector: '.glightbox',
     touchNavigation: true,
     loop: true,
     zoomable: true,
