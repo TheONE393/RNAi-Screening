@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template_string
+from flask import Flask, request, render_template_string, jsonify
 import os
 from datetime import datetime
 
@@ -37,6 +37,21 @@ def upload_file():
         return f"✅ Uploaded <b>{uploaded}</b> file(s) to <b>{line_name}</b>!"
     
     return render_template_string(HTML_TEMPLATE)
+
+@app.route('/delete_image', methods=['POST'])
+def delete_image():
+    data = request.get_json()
+    line = data.get('line')
+    img = data.get('img')
+    img_path = os.path.join(UPLOAD_FOLDER, line, img)
+    try:
+        if os.path.exists(img_path):
+            os.remove(img_path)
+            return jsonify({'success': True})
+        else:
+            return jsonify({'success': False, 'error': 'File not found'})
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)})
 
 
 if __name__ == '__main__':

@@ -124,6 +124,32 @@ function syncFromRender() {{
 }}
 </script>
 
+<script>
+document.addEventListener('click', function(e) {
+  if (e.target && e.target.classList.contains('delete-image-btn')) {
+    e.preventDefault();
+    if (!confirm('Are you sure you want to delete this image?')) return;
+    const line = e.target.getAttribute('data-line');
+    const img = e.target.getAttribute('data-img');
+    fetch(`http://127.0.0.1:5000/delete_image`, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ line: line, img: img })
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        alert('Image deleted! Reloading page...');
+        window.location.reload();
+      } else {
+        alert('Failed to delete image: ' + data.error);
+      }
+    })
+    .catch(() => alert('Failed to delete image (network error)'));
+  }
+});
+</script>
+
 </body>
 </html>
 '''
@@ -157,8 +183,8 @@ for line in line_ids:
               <a href="../Images/{line}/{img}" class="glightbox"
                   data-gallery="gallery-{line}"
                   data-title="{descriptions.get(img, {}).get('caption', '') or os.path.splitext(img)[0]}"
-                  data-description="{descriptions.get(img, {}).get('description', '')}<br><small><i>Uploaded: {datetime.fromtimestamp(os.path.getmtime(os.path.join(image_folder, img))).strftime('%Y-%m-%d %H:%M')}</i></small>">
-                <img src="../Images/{line}/{img}" alt="{img}">
+                  data-description="{descriptions.get(img, {}).get('description', '')}<br><small><i>Uploaded: {datetime.fromtimestamp(os.path.getmtime(os.path.join(image_folder, img))).strftime('%Y-%m-%d %H:%M')}</i></small><br><button class='delete-image-btn' data-line='{line}' data-img='{img}'>🗑️ Delete Image</button>">
+                <img src="../Images/{line}/{img}" alt="{img}" title="{descriptions.get(img, {}).get('caption', '') or os.path.splitext(img)[0]}">
               </a>
               <div class="image-caption">{descriptions.get(img, {}).get('caption', '') or os.path.splitext(img)[0]}</div>
             </div>
