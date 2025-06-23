@@ -9,7 +9,7 @@
 </head>
 <body>
 
-<button class="dark-toggle" onclick="toggleDarkMode()">🌙 Toggle Dark Mode</button>
+<button class="dark-toggle" onclick="toggleDarkMode()">🌙</button>
 <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
 
 <div class="sidebar" id="sidebar">
@@ -93,16 +93,16 @@
 
   <div class="image-gallery">
     
-              <div class="img-wrapper">
-                <a href="../Images/25868/20250623_074652_1.jpg" class="glightbox"
-            data-gallery="gallery-25868"
-            data-title=""
-            data-description="<br><small><i>Uploaded: 2025-06-23 07:46</i></small>">
-            <img src="../Images/25868/20250623_074652_1.jpg" alt="20250623_074652_1.jpg">
-                </a>
-                <div class="image-caption"></div>
-              </div>
-              
+            <div class="img-wrapper">
+              <a href="../Images/25868/20250623_074652_1.jpg" class="glightbox"
+                  data-gallery="gallery-25868"
+                  data-title="20250623_074652_1"
+                  data-description="<br><small><i>Uploaded: 2025-06-23 07:46</i></small>">
+                <img src="../Images/25868/20250623_074652_1.jpg" alt="20250623_074652_1.jpg">
+              </a>
+              <div class="image-caption">20250623_074652_1</div>
+            </div>
+            
   </div>
 </div>
 
@@ -133,6 +133,19 @@
 
   const lightbox = GLightbox({
     selector: '.glightbox'
+    touchNavigation: true,
+    loop: true,
+    zoomable: true,
+    draggable: true,
+    openEffect: 'zoom',
+    closeEffect: 'fade',
+    slideEffect: 'slide',
+    afterOpen: function() {
+      const activeSlide = document.querySelector('.glightbox-active');
+      if (activeSlide) {
+        activeSlide.scrollIntoView({ block: 'center', behavior: 'smooth' });
+      }
+    },
   });
 </script>
 

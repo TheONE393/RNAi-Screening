@@ -125,11 +125,16 @@ body {
 }
 
 .image-caption {
-  margin-top: 6px;
-  font-size: 14px;
-  color: #444;
-  word-wrap: break-word;
   text-align: center;
+  font-size: 1em;
+  color: #444;
+  margin-top: 6px;
+  word-break: break-all;
+}
+.img-wrapper {
+  display: inline-block;
+  margin: 10px;
+  vertical-align: top;
 }
 
 /* === Index Layout === */

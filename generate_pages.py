@@ -28,7 +28,7 @@ page_template = '''<!DOCTYPE html>
 </head>
 <body>
 
-<button class="dark-toggle" onclick="toggleDarkMode()">🌙 Toggle Dark Mode</button>
+<button class="dark-toggle" onclick="toggleDarkMode()">🌙</button>
 <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
 
 <div class="sidebar" id="sidebar">
@@ -86,6 +86,19 @@ page_template = '''<!DOCTYPE html>
 
   const lightbox = GLightbox({{
     selector: '.glightbox'
+    touchNavigation: true,
+    loop: true,
+    zoomable: true,
+    draggable: true,
+    openEffect: 'zoom',
+    closeEffect: 'fade',
+    slideEffect: 'slide',
+    afterOpen: function() {{
+      const activeSlide = document.querySelector('.glightbox-active');
+      if (activeSlide) {{
+        activeSlide.scrollIntoView({{ block: 'center', behavior: 'smooth' }});
+      }}
+    }},
   }});
 </script>
 
