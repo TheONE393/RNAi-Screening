@@ -214,19 +214,19 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 1em; /* Adjust gap as needed */
+  gap: 1em;
   margin-bottom: 2em;
-  padding: 0; /* Remove extra padding if present */
-  width: auto; /* Remove width: 50% if present */
+  padding: 0;
+  width: auto;
 }
 
 .upload-box input[type="file"] {
-  margin-right: 0; /* Remove margin that pushes button away */
+  margin-right: 0;
 }
 
 .upload-box button {
-  width: auto; /* Remove width: 50% if present */
-  margin-top: 0; /* Remove margin-top if present */
+  width: auto;
+  margin-top: 0;
 }
 
 /* === Sync Button === */
@@ -326,14 +326,5 @@ body.dark-mode .sidebar-link:hover {
   .go-index {
     padding: 12px 16px;
     font-size: 15px;
-  }
-  .upload-box {
-    padding: 1em;
-    margin: 0 auto;
-    width: 45%;
-  }
-  .upload-box button {
-    width: 45%;
-    margin-top: 10px;
   }
 }
