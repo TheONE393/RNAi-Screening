@@ -9,7 +9,7 @@ print(f"🚀 RNAi Automation started from: {BASE_DIR}")
 
 def run_watch_and_generate():
     print("🔁 Starting watch_and_generate.py...")
-    subprocess.run(["python", os.path.join(BASE_DIR, "watch_and_generate.py")])
+    subprocess.Popen(["python", os.path.join(BASE_DIR, "watch_and_generate.py")])
 
 def run_auto_push_loop(interval=3000):
     try:
