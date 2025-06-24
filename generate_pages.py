@@ -184,7 +184,6 @@ document.addEventListener('click', function(e) {{
 </html>
 '''
 
-
 # === Ensure folders exist ===
 os.makedirs(lines_folder, exist_ok=True)
 
@@ -314,7 +313,6 @@ if not specific_line:
 </body>
 </html>
 '''
-
 
     line_rows = ""
     cols_per_row = 5
