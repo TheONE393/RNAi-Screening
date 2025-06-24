@@ -18,6 +18,14 @@ body {
   padding-bottom: 0.3em;
   width: 100%;
 }
+.header {
+  position: sticky;
+  top: 0;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(5px);
+  z-index: 1000;
+  padding: 10px;
+}
 
 /* === Sidebar === */
 .sidebar {
@@ -136,6 +144,21 @@ body {
   margin: 10px;
   vertical-align: top;
 }
+.grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+.thumbnail {
+  border: 3px solid transparent;
+  border-radius: 10px;
+  transition: 0.3s ease-in-out;
+}
+
+.thumbnail:hover {
+  border-color: #00e0ff;
+  box-shadow: 0 0 10px rgba(0, 224, 255, 0.5);
+}
 
 /* === Index Layout === */
 .index-container {
@@ -171,12 +194,18 @@ body {
   font-weight: bold;
   border-radius: 10px;
   text-align: center;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition: transform 0.5s, box-shadow 0.5s ease;
 }
-
+.line-card::before {
+  content: '';
+  display: block;
+  height: 5px;
+  background: linear-gradient(90deg, #2193b0, #6dd5ed);
+  border-radius: 8px 8px 0 0;
+}
 .line-card:hover {
-  transform: scale(1.07);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+  transform: translateY(-5px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
 }
 
 /* === Search Boxes === */
@@ -304,7 +333,17 @@ body.dark-mode .sidebar-link:hover {
 .dark-toggle:hover {
   background-color: #666;
 }
-
+.fade-in {
+  opacity: 0;
+  transform: translateY(10ox);
+  animation: fadeIn 0.5s ease-in-out;
+}
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 /* === Mobile Styles === */
 @media screen and (max-width: 768px) {
   .sidebar {

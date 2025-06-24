@@ -43,7 +43,7 @@ page_template = '''<!DOCTYPE html>
 </div>
 
 <div class="content">
-  <h1 class="page-title">RNAi Line {line}</h1>
+  <h1 class="page-title header">RNAi Line {line}</h1>
   <p style="text-align:center; color:#666;">Notes and images for line {line}.</p>
 
   <div class="upload-box">
@@ -54,7 +54,7 @@ page_template = '''<!DOCTYPE html>
     </form>
   </div>
 
-  <div class="image-gallery">
+  <div class="image-gallery grid">
     {image_tags}
   </div>
 </div>
@@ -214,7 +214,7 @@ for line in line_ids:
                   data-gallery="gallery-{line}"
                   data-title="{descriptions.get(img, {}).get('caption', '') or os.path.splitext(img)[0]}"
                   data-description="{descriptions.get(img, {}).get('description', '')}<br><small><i>Uploaded: {datetime.fromtimestamp(os.path.getmtime(os.path.join(image_folder, img))).strftime('%Y-%m-%d %H:%M')}</i></small><span id='popup-delete-btn' data-line='{line}' data-img='{img}'></span>">
-                <img src="../Images/{line}/{img}" alt="{img}" title="{descriptions.get(img, {}).get('caption', '') or os.path.splitext(img)[0]}">
+                <img class="thumbnail fade-in" src="../Images/{line}/{img}" alt="{img}" title="{descriptions.get(img, {}).get('caption', '') or os.path.splitext(img)[0]}">
               </a>
               <div class="image-caption">{descriptions.get(img, {}).get('caption', '') or os.path.splitext(img)[0]}</div>
             </div>
@@ -320,7 +320,7 @@ if not specific_line:
         row = line_ids[i:i + cols_per_row]
         row_html = '<div class="index-row">\n'
         for line_id in row:
-            row_html += f'<div class="index-cell"><a class="line-card" href="lines/{line_id}.html">{line_id}</a></div>\n'
+            row_html += f'<div class="index-cell"><a class="line-card fade-in" href="lines/{line_id}.html">{line_id}</a></div>\n'
         row_html += '</div>\n'
         line_rows += row_html
 
