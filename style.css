@@ -182,6 +182,7 @@ body {
 /* === Search Boxes === */
 .search-box {
   margin-bottom: 1em;
+  margin-right: 1em;
   text-align: center;
 }
 
@@ -237,6 +238,8 @@ body {
 /* === Sync Button === */
 .sync-button {
   margin-top: 10px;
+  margin-left: 5px;
+  align-self: center;
   padding: 10px;
   background-color: #1e90ff;
   color: white;
