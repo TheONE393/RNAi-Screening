@@ -9,20 +9,20 @@ print(f"🚀 RNAi Automation started from: {BASE_DIR}")
 
 def run_watch_and_generate():
     print("🔁 Starting watch_and_generate.py...")
-    subprocess.Popen(["python", os.path.join(BASE_DIR, "watch_and_generate.py")])
+    subprocess.run(["python", os.path.join(BASE_DIR, "watch_and_generate.py")])
 
 def run_auto_push_loop(interval=3000):
     try:
         while True:
             print("🔁 Running auto_push_to_github.py...")
-            subprocess.Popen(["python", os.path.join(BASE_DIR, "auto_push_to_github.py")])
+            subprocess.run(["python", os.path.join(BASE_DIR, "auto_push_to_github.py")])
             time.sleep(interval)
     except Exception as e:
         print(f"❌ Auto-push thread error: {e}")
 
 def run_upload_server():
     print("🔁 Starting upload_server.py...")
-    subprocess.Popen(["python", os.path.join(BASE_DIR, "upload_server.py")])
+    subprocess.run(["python", os.path.join(BASE_DIR, "upload_server.py")])
 
 if __name__ == "__main__":
     try:
