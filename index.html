@@ -108,29 +108,29 @@
     const term = searchInput.value.toLowerCase();
     const rows = table.querySelectorAll('.index-row');
     rows.forEach(row => {
+      let anyVisible = false;
       const cells = row.querySelectorAll('.line-card');
-      let visibleInRow = false;
       cells.forEach(cell => {
-        const text = cell.textContent.toLowerCase();
-        const match = text.includes(term);
+        const match = !term || cell.textContent.toLowerCase().includes(term);
         cell.parentElement.style.display = match ? '' : 'none';
-        if (match) visibleInRow = true;
+        if (match) anyVisible = true;
       });
-      row.style.display = visibleInRow ? '' : 'none';
+      row.style.display = anyVisible ? '' : 'none';
     });
+  });
+
+  window.addEventListener('DOMContentLoaded', () => {
+    searchInput.dispatchEvent(new Event('input'));
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+      document.body.classList.add('dark-mode');
+    }
   });
 
   function toggleDarkMode() {
     document.body.classList.toggle('dark-mode');
     localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
   }
-
-  window.addEventListener('DOMContentLoaded', () => {
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'dark') {
-      document.body.classList.add('dark-mode');
-    }
-  });
 </script>
 
 </body>

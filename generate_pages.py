@@ -95,13 +95,15 @@ page_template = '''<!DOCTYPE html>
     slideEffect: 'slide',
     afterOpen: function() {{
       setTimeout(() => {{
-        const btnSpan = document.querySelector('.gdesc #popup-delete-btn');
-        if (btnSpan && !btnSpan.querySelector('button')) {{
-          const line = btnSpan.getAttribute('data-line');
-          const img = btnSpan.getAttribute('data-img');
+        const slide = document.querySelector('.gslide.current a');
+        const line = slide?.getAttribute('data-line');
+        const img = slide?.getAttribute('data-img');
+        if (line && img) {{
           const btn = document.createElement('button');
           btn.textContent = '🗑️ Delete Image';
           btn.className = 'delete-image-btn';
+          btn.setAttribute('data-line', line);
+          btn.setAttribute('data-img', img);
           btn.onclick = function(e) {{
             e.preventDefault();
             if (!confirm('Are you sure you want to delete this image?')) return;
@@ -121,13 +123,12 @@ page_template = '''<!DOCTYPE html>
             }})
             .catch(() => alert('Failed to delete image (network error)'));
           }};
-          btnSpan.appendChild(btn);
+          const descBox = document.querySelector('.gdesc');
+          if (descBox && !descBox.querySelector('.delete-image-btn')) {{
+            descBox.appendChild(btn);
+          }}
         }}
       }}, 100);
-      const activeSlide = document.querySelector('.glightbox-active');
-      if (activeSlide) {{
-        activeSlide.scrollIntoView({{ block: 'center', behavior: 'smooth' }});
-      }}
     }},
   }});
 </script>
@@ -152,32 +153,6 @@ function syncFromRender() {{
         .then(() => alert("✅ Sync started!"))
         .catch(() => alert("❌ Sync failed. Check console."));
 }}
-</script>
-
-<script>
-document.addEventListener('click', function(e) {{
-  if (e.target && e.target.classList.contains('delete-image-btn')) {{
-    e.preventDefault();
-    if (!confirm('Are you sure you want to delete this image?')) return;
-    const line = e.target.getAttribute('data-line');
-    const img = e.target.getAttribute('data-img');
-    fetch(`http://127.0.0.1:5000/delete_image`, {{
-      method: 'POST',
-      headers: {{'Content-Type': 'application/json'}},
-      body: JSON.stringify({{ line: line, img: img }})
-    }})
-    .then(res => res.json())
-    .then(data => {{
-      if (data.success) {{
-        alert('Image deleted! Reloading page...');
-        window.location.reload();
-      }} else {{
-        alert('Failed to delete image: ' + data.error);
-      }}
-    }})
-    .catch(() => alert('Failed to delete image (network error)'));
-  }}
-}});
 </script>
 
 </body>
@@ -213,7 +188,8 @@ for line in line_ids:
               <a href="../Images/{line}/{img}" class="glightbox"
                   data-gallery="gallery-{line}"
                   data-title="{descriptions.get(img, {}).get('caption', '') or os.path.splitext(img)[0]}"
-                  data-description="{descriptions.get(img, {}).get('description', '')}<br><small><i>Uploaded: {datetime.fromtimestamp(os.path.getmtime(os.path.join(image_folder, img))).strftime('%Y-%m-%d %H:%M')}</i></small><span id='popup-delete-btn' data-line='{line}' data-img='{img}'></span>">
+                  data-description="{descriptions.get(img, {}).get('description', '')}<br><small><i>Uploaded: {datetime.fromtimestamp(os.path.getmtime(os.path.join(image_folder, img))).strftime('%Y-%m-%d %H:%M')}</i></small>"
+                  data-line="{line}" data-img="{img}">
                 <img class="thumbnail fade-in" src="../Images/{line}/{img}" alt="{img}" title="{descriptions.get(img, {}).get('caption', '') or os.path.splitext(img)[0]}">
               </a>
               <div class="image-caption">{descriptions.get(img, {}).get('caption', '') or os.path.splitext(img)[0]}</div>
@@ -285,29 +261,29 @@ if not specific_line:
     const term = searchInput.value.toLowerCase();
     const rows = table.querySelectorAll('.index-row');
     rows.forEach(row => {{
+      let anyVisible = false;
       const cells = row.querySelectorAll('.line-card');
-      let visibleInRow = false;
       cells.forEach(cell => {{
-        const text = cell.textContent.toLowerCase();
-        const match = text.includes(term);
+        const match = !term || cell.textContent.toLowerCase().includes(term);
         cell.parentElement.style.display = match ? '' : 'none';
-        if (match) visibleInRow = true;
+        if (match) anyVisible = true;
       }});
-      row.style.display = visibleInRow ? '' : 'none';
+      row.style.display = anyVisible ? '' : 'none';
     }});
+  }});
+
+  window.addEventListener('DOMContentLoaded', () => {{
+    searchInput.dispatchEvent(new Event('input'));
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {{
+      document.body.classList.add('dark-mode');
+    }}
   }});
 
   function toggleDarkMode() {{
     document.body.classList.toggle('dark-mode');
     localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
   }}
-
-  window.addEventListener('DOMContentLoaded', () => {{
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'dark') {{
-      document.body.classList.add('dark-mode');
-    }}
-  }});
 </script>
 
 </body>
