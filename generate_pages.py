@@ -63,65 +63,95 @@ page_template = '''<!DOCTYPE html>
 
 <script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
 <script>
-  function toggleSidebar() {{
+  function toggleSidebar() {
     document.getElementById("sidebar").classList.toggle("open");
-  }}
+  }
 
-  window.onload = function() {{
+  window.onload = function() {
     const active = document.getElementById("activeLink");
-    if (active) {{
-      active.scrollIntoView({{ block: "center", behavior: "smooth" }});
-    }}
-  }};
+    if (active) {
+      active.scrollIntoView({ block: "center", behavior: "smooth" });
+    }
+  };
 
   const sidebarInput = document.getElementById('sidebarSearch');
   const sidebarLinks = document.getElementById('sidebarLinks');
-  sidebarInput.addEventListener('input', () => {{
+  sidebarInput.addEventListener('input', () => {
     const term = sidebarInput.value.toLowerCase();
     const links = sidebarLinks.querySelectorAll('a');
-    links.forEach(link => {{
+    links.forEach(link => {
       link.style.display = link.textContent.toLowerCase().includes(term) ? '' : 'none';
-    }});
-  }});
+    });
+  });
 
-  const lightbox = GLightbox({{
+  const lightbox = GLightbox({
     selector: '.glightbox',
     touchNavigation: true,
     loop: true,
     zoomable: true,
-    draggable: true,
+    keyboardNavigation: true,
     openEffect: 'zoom',
     closeEffect: 'fade',
     slideEffect: 'slide',
-    afterOpen: function() {{
+    afterOpen: function() {
+      setTimeout(() => {
+        const btnSpan = document.querySelector('.gdesc #popup-delete-btn');
+        if (btnSpan && !btnSpan.querySelector('button')) {
+          const line = btnSpan.getAttribute('data-line');
+          const img = btnSpan.getAttribute('data-img');
+          const btn = document.createElement('button');
+          btn.textContent = '🗑️ Delete Image';
+          btn.className = 'delete-image-btn';
+          btn.onclick = function(e) {
+            e.preventDefault();
+            if (!confirm('Are you sure you want to delete this image?')) return;
+            fetch(`http://127.0.0.1:5000/delete_image`, {
+              method: 'POST',
+              headers: {'Content-Type': 'application/json'},
+              body: JSON.stringify({ line: line, img: img })
+            })
+            .then(res => res.json())
+            .then(data => {
+              if (data.success) {
+                alert('Image deleted! Reloading page...');
+                window.location.reload();
+              } else {
+                alert('Failed to delete image: ' + data.error);
+              }
+            })
+            .catch(() => alert('Failed to delete image (network error)'));
+          };
+          btnSpan.appendChild(btn);
+        }
+      }, 100);
       const activeSlide = document.querySelector('.glightbox-active');
-      if (activeSlide) {{
-        activeSlide.scrollIntoView({{ block: 'center', behavior: 'smooth' }});
-      }}
-    }},
-  }});
+      if (activeSlide) {
+        activeSlide.scrollIntoView({ block: 'center', behavior: 'smooth' });
+      }
+    },
+  });
 </script>
 
 <script>
-  function toggleDarkMode() {{
+  function toggleDarkMode() {
     document.body.classList.toggle('dark-mode');
     localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
-  }}
+  }
 
-  window.addEventListener('DOMContentLoaded', () => {{
+  window.addEventListener('DOMContentLoaded', () => {
     const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'dark') {{
+    if (savedTheme === 'dark') {
       document.body.classList.add('dark-mode');
-    }}
-  }});
+    }
+  });
 </script>
 
 <script>
-function syncFromRender() {{
+function syncFromRender() {
     fetch("sync_from_upload_server.bat")
         .then(() => alert("✅ Sync started!"))
         .catch(() => alert("❌ Sync failed. Check console."));
-}}
+}
 </script>
 
 <script>
@@ -183,7 +213,7 @@ for line in line_ids:
               <a href="../Images/{line}/{img}" class="glightbox"
                   data-gallery="gallery-{line}"
                   data-title="{descriptions.get(img, {}).get('caption', '') or os.path.splitext(img)[0]}"
-                  data-description="{descriptions.get(img, {}).get('description', '')}<br><small><i>Uploaded: {datetime.fromtimestamp(os.path.getmtime(os.path.join(image_folder, img))).strftime('%Y-%m-%d %H:%M')}</i></small><br><button class='delete-image-btn' data-line='{line}' data-img='{img}'>🗑️ Delete Image</button>">
+                  data-description="{descriptions.get(img, {}).get('description', '')}<br><small><i>Uploaded: {datetime.fromtimestamp(os.path.getmtime(os.path.join(image_folder, img))).strftime('%Y-%m-%d %H:%M')}</i></small><span id='popup-delete-btn' data-line='{line}' data-img='{img}'></span>">
                 <img src="../Images/{line}/{img}" alt="{img}" title="{descriptions.get(img, {}).get('caption', '') or os.path.splitext(img)[0]}">
               </a>
               <div class="image-caption">{descriptions.get(img, {}).get('caption', '') or os.path.splitext(img)[0]}</div>
@@ -251,33 +281,33 @@ if not specific_line:
 <script>
   const searchInput = document.getElementById('indexSearch');
   const table = document.getElementById('indexTable');
-  searchInput.addEventListener('input', () => {{
+  searchInput.addEventListener('input', () => {
     const term = searchInput.value.toLowerCase();
     const rows = table.querySelectorAll('.index-row');
-    rows.forEach(row => {{
+    rows.forEach(row => {
       const cells = row.querySelectorAll('.line-card');
       let visibleInRow = false;
-      cells.forEach(cell => {{
+      cells.forEach(cell => {
         const text = cell.textContent.toLowerCase();
         const match = text.includes(term);
         cell.parentElement.style.display = match ? '' : 'none';
         if (match) visibleInRow = true;
-      }});
+      });
       row.style.display = visibleInRow ? '' : 'none';
-    }});
-  }});
+    });
+  });
 
-  function toggleDarkMode() {{
+  function toggleDarkMode() {
     document.body.classList.toggle('dark-mode');
     localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
-  }}
+  }
 
-  window.addEventListener('DOMContentLoaded', () => {{
+  window.addEventListener('DOMContentLoaded', () => {
     const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'dark') {{
+    if (savedTheme === 'dark') {
       document.body.classList.add('dark-mode');
-    }}
-  }});
+    }
+  });
 </script>
 
 </body>
